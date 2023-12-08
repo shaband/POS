@@ -1,0 +1,124 @@
+definitions:
+  dto.CategoryDTO:
+    properties:
+      category_id:
+        example: 1
+        type: integer
+      name:
+        example: category1
+        type: string
+    type: object
+  model.Category:
+    properties:
+      category_id:
+        example: 1
+        type: integer
+      children:
+        items: {}
+        type: array
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: category1
+        type: string
+      parent: {}
+      updatedAt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: get All Categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/model.Category'
+              type: array
+            type: array
+      summary: get All Categories
+      tags:
+      - categories
+    post:
+      consumes:
+      - application/json
+      description: Add New Category
+      parameters:
+      - description: category data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CategoryDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Category'
+      summary: Add New Category
+      tags:
+      - categories
+  /categories/{category_id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update New Category
+      parameters:
+      - description: category data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CategoryDTO'
+      - description: category id
+        in: path
+        name: category_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Category'
+      summary: Update New Category
+      tags:
+      - categories
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete  Category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted successfully
+          schema:
+            type: string
+      summary: delete  Category
+      tags:
+      - categories
+swagger: "2.0"

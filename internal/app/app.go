@@ -6,6 +6,7 @@ import (
 	"github.com/shaband/POS/internal/app/appconfig"
 	"github.com/shaband/POS/internal/app/appcontext"
 	"github.com/shaband/POS/internal/controller"
+	"github.com/shaband/POS/internal/helper"
 	"github.com/shaband/POS/internal/infra"
 	"github.com/shaband/POS/internal/repo"
 	"github.com/shaband/POS/internal/server"
@@ -27,6 +28,7 @@ func New(ctx appcontext.Ctx, additionalOpts ...fx.Option) *fx.App {
 	baseOpts := []fx.Option{
 		fx.WithLogger(fxlogger.Logger),
 		fx.Supply(conf),
+		helper.Module(),
 		controller.Module(),
 		infra.Module(),
 		repo.Module(),
