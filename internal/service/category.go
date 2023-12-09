@@ -17,20 +17,19 @@ func NewCategory(repo *repo.Category) *Category {
 		repo: repo,
 	}
 }
+
 func (s *Category) GetCategories(ctx context.Context) ([]model.Category, error) {
-
 	return s.repo.GetCategories(ctx)
-
 }
-func (s *Category) AddCategory(ctx context.Context, CategoryDTO *dto.CategoryDTO) (*model.Category, error) {
 
-	return s.repo.AddCategory(ctx, CategoryDTO)
+func (s *Category) AddCategory(ctx context.Context, categoryDTO *dto.CategoryDTO) (*model.Category, error) {
+	return s.repo.AddCategory(ctx, categoryDTO)
 }
-func (s *Category) UpdateCategory(ctx context.Context, categoryID int, CategoryDTO *dto.CategoryDTO) (*model.Category, error) {
 
-	return s.repo.UpdateCategory(ctx, categoryID, CategoryDTO)
+func (s *Category) UpdateCategory(ctx context.Context, categoryID int, categoryDTO *dto.CategoryDTO) (*model.Category, error) {
+	return s.repo.UpdateCategory(ctx, categoryID, categoryDTO)
 }
+
 func (s *Category) DeleteCategory(ctx context.Context, categoryID int) error {
-
 	return s.repo.DeleteCategory(ctx, categoryID)
 }

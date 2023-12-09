@@ -33,9 +33,12 @@ func (r *Category) AddCategory(ctx context.Context, categoryDTO *dto.CategoryDTO
 		Name:       categoryDTO.Name,
 		CategoryID: categoryDTO.CategoryId,
 	}
-	result, err := r.db.NewInsert().
-		Model(&category).
-		Exec(ctx)
+	q := r.db.NewInsert().
+		Model(&category)
+	if category.CategoryID == 0 {
+		q.ExcludeColumn("category_id")
+	}
+	result, err := q.Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -43,23 +46,28 @@ func (r *Category) AddCategory(ctx context.Context, categoryDTO *dto.CategoryDTO
 	category.ID = int(LastID)
 	return &category, err
 }
+
 func (r *Category) UpdateCategory(ctx context.Context, categoryID int, categoryDTO *dto.CategoryDTO) (*model.Category, error) {
 	category := model.Category{
 		ID:         categoryID,
 		Name:       categoryDTO.Name,
 		CategoryID: categoryDTO.CategoryId,
 	}
-	_, err := r.db.NewUpdate().
+	q := r.db.NewUpdate().
 		Model(&category).
-		WherePK().
-		Exec(ctx)
+		WherePK()
+	if category.CategoryID == 0 {
+		q.ExcludeColumn("category_id")
+	}
+	_, err := q.Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &category, err
 }
+
 func (r *Category) DeleteCategory(ctx context.Context, categoryID int) error {
-	var category model.Category = model.Category{
+	category := model.Category{
 		ID: categoryID,
 	}
 

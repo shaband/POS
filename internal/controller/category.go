@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/shaband/POS/internal/model"
 	"github.com/shaband/POS/internal/model/dto"
 	"github.com/shaband/POS/internal/service"
 	"go.uber.org/fx"
@@ -30,14 +31,11 @@ func RegisterCategory(c Category) {
 //	@Success		200	{array}	[]model.Category
 //	@Router			/categories [get]
 func (c Category) GetCategories(ctx *fiber.Ctx) error {
-
 	results, err := c.Service.GetCategories(ctx.Context())
-	if err != nil {
-		return err
-
+	if err == nil {
+		return ctx.JSON(results)
 	}
-	ctx.JSON(results)
-	return nil
+	return err
 }
 
 // AddCategories godoc
@@ -55,12 +53,10 @@ func (c Category) AddCategory(ctx *fiber.Ctx) error {
 	_ = ctx.BodyParser(CategoryDTO)
 
 	results, err := c.Service.AddCategory(ctx.Context(), CategoryDTO)
-	if err != nil {
-		return err
-
+	if err == nil {
+		return ctx.JSON(results)
 	}
-	ctx.JSON(results)
-	return nil
+	return err
 }
 
 // UpdateCategories godoc
@@ -79,17 +75,14 @@ func (c Category) UpdateCategory(ctx *fiber.Ctx) error {
 	_ = ctx.BodyParser(CategoryDTO)
 
 	id, err := ctx.ParamsInt("id")
-	if err != nil {
-		return err
+	if err == nil {
+		var results *model.Category
+		results, err = c.Service.UpdateCategory(ctx.Context(), id, CategoryDTO)
+		if err == nil {
+			return ctx.JSON(results)
+		}
 	}
-	results, err := c.Service.UpdateCategory(ctx.Context(), id, CategoryDTO)
-
-	if err != nil {
-		return err
-
-	}
-	ctx.JSON(results)
-	return nil
+	return err
 }
 
 // DELETECategories godoc
@@ -105,18 +98,13 @@ func (c Category) UpdateCategory(ctx *fiber.Ctx) error {
 //
 //	@Router			/categories/{id} [Delete]
 func (c Category) DeleteCategory(ctx *fiber.Ctx) error {
-
 	id, err := ctx.ParamsInt("id")
-	if err != nil {
-		return err
+	if err == nil {
+		err = c.Service.DeleteCategory(ctx.Context(), id)
+		if err == nil {
+			_, err = ctx.WriteString("deleted successfully")
+		}
 	}
 
-	err = c.Service.DeleteCategory(ctx.Context(), id)
-	if err != nil {
-		return err
-
-	}
-
-	ctx.Write([]byte("deleted successfully"))
-	return nil
+	return err
 }

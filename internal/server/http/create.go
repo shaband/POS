@@ -10,16 +10,16 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
-//	@title			POS API
-//	@version		1.0
-//	@description	This is a POS api docs
-//	@termsOfService	http://swagger.io/terms/
-//	@contact.name	Shabandinho
-//	@contact.email	mahmoudshaband@gmail.com
-//	@license.name	Apache 2.0
-//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
-//	@host			localhost:3500
-//	@BasePath		/
+// @title			POS API
+// @version		1.0
+// @description	This is a POS api docs
+// @termsOfService	http://swagger.io/terms/
+// @contact.name	Shabandinho
+// @contact.email	mahmoudshaband@gmail.com
+// @license.name	Apache 2.0
+// @license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+// @host			localhost:3500
+// @BasePath		/api/v1
 func Create() *fiber.App {
 	app := fiber.New(fiber.Config{})
 
@@ -27,7 +27,8 @@ func Create() *fiber.App {
 	app.Use(logger.New())
 	app.Use(cors.New())
 	app.Use(limiter.New(limiter.Config{
-		Max:        20,
+		Max: 20,
+
 		Expiration: time.Second * 60,
 	}))
 

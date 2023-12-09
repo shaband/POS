@@ -1,0 +1,18 @@
+{
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "*.go": "${capture}_rehydrate.go, ${capture}_test.go",
+        "*.proto": "${capture}.pb.go, ${capture}_grpc.pb.go"
+    },
+    "clang-format.style": "google",
+    "go.diagnostic.vulncheck": "Imports",
+    "go.useLanguageServer": true,
+    "go.lintTool": "golangci-lint",
+    "go.lintFlags": [
+        "--fast"
+    ],
+    "gopls": {
+        "formatting.gofumpt": true
+    }
+}

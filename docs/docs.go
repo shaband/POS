@@ -9,7 +9,15 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Shabandinho",
+            "email": "mahmoudshaband@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -171,14 +179,7 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 1
                 },
-                "children": {
-                    "type": "array",
-                    "items": {}
-                },
                 "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
                     "type": "string"
                 },
                 "id": {
@@ -188,10 +189,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "category1"
-                },
-                "parent": {},
-                "updatedAt": {
-                    "type": "string"
                 }
             }
         }
@@ -200,12 +197,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "localhost:3500",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "POS API",
+	Description:      "This is a POS api docs",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

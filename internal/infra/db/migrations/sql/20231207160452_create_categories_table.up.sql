@@ -8,7 +8,7 @@ create table public.categories (
     updated_at timestamp not null default now(),
     deleted_at timestamp,
     name text not null,
-    categories_id integer  REFERENCES categories
+    category_id integer  REFERENCES categories
 );
 
 create unique index categories_id_uindex on public.categories (id)

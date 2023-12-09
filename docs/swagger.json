@@ -1,8 +1,21 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This is a POS api docs",
+        "title": "POS API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Shabandinho",
+            "email": "mahmoudshaband@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
+    "host": "localhost:3500",
+    "basePath": "/api/v1",
     "paths": {
         "/categories": {
             "get": {
@@ -160,14 +173,7 @@
                     "type": "integer",
                     "example": 1
                 },
-                "children": {
-                    "type": "array",
-                    "items": {}
-                },
                 "createdAt": {
-                    "type": "string"
-                },
-                "deletedAt": {
                     "type": "string"
                 },
                 "id": {
@@ -177,10 +183,6 @@
                 "name": {
                     "type": "string",
                     "example": "category1"
-                },
-                "parent": {},
-                "updatedAt": {
-                    "type": "string"
                 }
             }
         }
