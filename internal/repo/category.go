@@ -38,12 +38,10 @@ func (r *Category) AddCategory(ctx context.Context, categoryDTO *dto.CategoryDTO
 	if category.CategoryID == 0 {
 		q.ExcludeColumn("category_id")
 	}
-	result, err := q.Exec(ctx)
+	_, err := q.Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
-	LastID, _ := result.LastInsertId()
-	category.ID = int(LastID)
 	return &category, err
 }
 
@@ -55,7 +53,8 @@ func (r *Category) UpdateCategory(ctx context.Context, categoryID int, categoryD
 	}
 	q := r.db.NewUpdate().
 		Model(&category).
-		WherePK()
+		WherePK().
+		Column("name", "category_id")
 	if category.CategoryID == 0 {
 		q.ExcludeColumn("category_id")
 	}

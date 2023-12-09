@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/shaband/POS/internal/model"
 	"github.com/shaband/POS/internal/model/dto"
+	"github.com/shaband/POS/internal/output"
 	"github.com/shaband/POS/internal/service"
 	"go.uber.org/fx"
 )
@@ -31,8 +32,15 @@ func RegisterCategory(c Category) {
 //	@Success		200	{array}	[]model.Category
 //	@Router			/categories [get]
 func (c Category) GetCategories(ctx *fiber.Ctx) error {
-	results, err := c.Service.GetCategories(ctx.Context())
+	categories, err := c.Service.GetCategories(ctx.Context())
 	if err == nil {
+		var results []output.Category
+		for _, category := range categories {
+			results = append(results, output.Category{
+				Id:   uint(category.ID),
+				Name: category.Name,
+			})
+		}
 		return ctx.JSON(results)
 	}
 	return err
@@ -46,7 +54,7 @@ func (c Category) GetCategories(ctx *fiber.Ctx) error {
 //	@Accept			json
 //	@Produce		json
 //	@param			request	body		dto.CategoryDTO	true	"category data"
-//	@Success		200		{object}	model.Category
+//	@Success		200		{object}	output.Category
 //	@Router			/categories [Post]
 func (c Category) AddCategory(ctx *fiber.Ctx) error {
 	CategoryDTO := new(dto.CategoryDTO)
@@ -54,7 +62,10 @@ func (c Category) AddCategory(ctx *fiber.Ctx) error {
 
 	results, err := c.Service.AddCategory(ctx.Context(), CategoryDTO)
 	if err == nil {
-		return ctx.JSON(results)
+		return ctx.JSON(output.Category{
+			Id:   uint(results.ID),
+			Name: results.Name,
+		})
 	}
 	return err
 }
@@ -79,7 +90,10 @@ func (c Category) UpdateCategory(ctx *fiber.Ctx) error {
 		var results *model.Category
 		results, err = c.Service.UpdateCategory(ctx.Context(), id, CategoryDTO)
 		if err == nil {
-			return ctx.JSON(results)
+			return ctx.JSON(output.Category{
+				Id:   uint(results.ID),
+				Name: results.Name,
+			})
 		}
 	}
 	return err

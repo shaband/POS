@@ -1,7 +1,13 @@
 package helper
 
-import "go.uber.org/fx"
+import (
+	// "github.com/go-playground/validator/v10"
+	"go.uber.org/fx"
+)
 
 func Module() fx.Option {
-	return fx.Module("helper", fx.Invoke())
+	return fx.Module("helper", fx.Invoke(
+	// validator.New(),
+	// RegisterValidator,
+	))
 }
