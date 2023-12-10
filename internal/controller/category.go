@@ -13,6 +13,7 @@ type Category struct {
 	fx.In
 	Service *service.Category
 	Route   fiber.Router `name:"api-v1"`
+	// Validator helper.XValidator
 }
 
 func RegisterCategory(c Category) {

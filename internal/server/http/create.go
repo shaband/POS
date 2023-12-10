@@ -21,7 +21,14 @@ import (
 // @host			localhost:3500
 // @BasePath		/api/v1
 func Create() *fiber.App {
-	app := fiber.New(fiber.Config{})
+	app := fiber.New(fiber.Config{
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			return c.Status(fiber.StatusBadRequest).JSON(GlobalErrorHandlerResp{
+				Success: false,
+				Message: err.Error(),
+			})
+		},
+	})
 
 	app.Use(recover.New())
 	app.Use(logger.New())
@@ -33,4 +40,9 @@ func Create() *fiber.App {
 	}))
 
 	return app
+}
+
+type GlobalErrorHandlerResp struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
 }
