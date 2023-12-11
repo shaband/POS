@@ -42,10 +42,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/model.Category"
-                                }
+                                "$ref": "#/definitions/output.Category"
                             }
                         }
                     }
@@ -78,7 +75,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Category"
+                            "$ref": "#/definitions/output.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
                         }
                     }
                 }
@@ -121,6 +124,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.Category"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
                     }
                 }
             }
@@ -162,10 +171,6 @@ const docTemplate = `{
         "dto.CategoryDTO": {
             "type": "object",
             "properties": {
-                "category_id": {
-                    "type": "integer",
-                    "example": 1
-                },
                 "name": {
                     "type": "string",
                     "example": "category1"
@@ -179,9 +184,6 @@ const docTemplate = `{
                     "type": "integer",
                     "example": 1
                 },
-                "createdAt": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer",
                     "example": 1
@@ -189,6 +191,32 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "category1"
+                }
+            }
+        },
+        "output.Category": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "category1"
+                }
+            }
+        },
+        "output.HTTPError": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "name field is required"
+                },
+                "success": {
+                    "type": "boolean",
+                    "example": false
                 }
             }
         }

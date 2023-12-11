@@ -2,9 +2,6 @@ basePath: /api/v1
 definitions:
   dto.CategoryDTO:
     properties:
-      category_id:
-        example: 1
-        type: integer
       name:
         example: category1
         type: string
@@ -14,14 +11,30 @@ definitions:
       category_id:
         example: 1
         type: integer
-      createdAt:
-        type: string
       id:
         example: 1
         type: integer
       name:
         example: category1
         type: string
+    type: object
+  output.Category:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: category1
+        type: string
+    type: object
+  output.HTTPError:
+    properties:
+      message:
+        example: name field is required
+        type: string
+      success:
+        example: false
+        type: boolean
     type: object
 host: localhost:3500
 info:
@@ -48,9 +61,7 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/model.Category'
-              type: array
+              $ref: '#/definitions/output.Category'
             type: array
       summary: get All Categories
       tags:
@@ -72,7 +83,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Category'
+            $ref: '#/definitions/output.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
       summary: Add New Category
       tags:
       - categories
@@ -100,6 +115,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
       summary: Update New Category
       tags:
       - categories

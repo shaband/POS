@@ -1,6 +1,6 @@
 package output
 
 type Category struct {
-	Id   uint
-	Name string
+	Id   uint   `example:"1"`
+	Name string `example:"category1"`
 }

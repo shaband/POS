@@ -31,7 +31,7 @@ func RegisterCategory(c Category) {
 //	@Tags			categories
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{array}	[]model.Category
+//	@Success		200	{array}	output.Category
 //	@Router			/categories [get]
 func (c Category) GetCategories(ctx *fiber.Ctx) error {
 	categories, err := c.Service.GetCategories(ctx.Context())
@@ -57,17 +57,21 @@ func (c Category) GetCategories(ctx *fiber.Ctx) error {
 //	@Produce		json
 //	@param			request	body		dto.CategoryDTO	true	"category data"
 //	@Success		200		{object}	output.Category
-//	@Router			/categories [Post]
+//
+// @Failure      	400  	{object}  	output.HTTPError
+// @Router			/categories [Post]
 func (c Category) AddCategory(ctx *fiber.Ctx) error {
 	CategoryDTO := new(dto.CategoryDTO)
 	_ = ctx.BodyParser(CategoryDTO)
-
-	results, err := c.Service.AddCategory(ctx.Context(), CategoryDTO)
-	if err == nil {
-		return ctx.JSON(output.Category{
-			Id:   uint(results.ID),
-			Name: results.Name,
-		})
+	isValid, err := c.Validator.Validate(CategoryDTO)
+	if isValid {
+		results, err := c.Service.AddCategory(ctx.Context(), CategoryDTO)
+		if err == nil {
+			return ctx.JSON(output.Category{
+				Id:   uint(results.ID),
+				Name: results.Name,
+			})
+		}
 	}
 	return err
 }
@@ -81,21 +85,27 @@ func (c Category) AddCategory(ctx *fiber.Ctx) error {
 //	@Produce		json
 //	@param			request		body		dto.CategoryDTO	true	"category data"
 //	@param			category_id	path		int				true	"category id"
+//
 //	@Success		200			{object}	model.Category
-//	@Router			/categories/{category_id} [Patch]
+//
+// @Failure      	400  		{object}  	output.HTTPError
+// @Router			/categories/{category_id} [Patch]
 func (c Category) UpdateCategory(ctx *fiber.Ctx) error {
 	CategoryDTO := new(dto.CategoryDTO)
 	_ = ctx.BodyParser(CategoryDTO)
 
-	id, err := ctx.ParamsInt("id")
-	if err == nil {
-		var results *model.Category
-		results, err = c.Service.UpdateCategory(ctx.Context(), id, CategoryDTO)
+	isValid, err := c.Validator.Validate(CategoryDTO)
+	if isValid {
+		id, err := ctx.ParamsInt("id")
 		if err == nil {
-			return ctx.JSON(output.Category{
-				Id:   uint(results.ID),
-				Name: results.Name,
-			})
+			var results *model.Category
+			results, err = c.Service.UpdateCategory(ctx.Context(), id, CategoryDTO)
+			if err == nil {
+				return ctx.JSON(output.Category{
+					Id:   uint(results.ID),
+					Name: results.Name,
+				})
+			}
 		}
 	}
 	return err
