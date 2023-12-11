@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/shaband/POS/internal/helper"
 	"github.com/shaband/POS/internal/model"
 	"github.com/shaband/POS/internal/model/dto"
 	"github.com/shaband/POS/internal/output"
@@ -11,9 +12,9 @@ import (
 
 type Category struct {
 	fx.In
-	Service *service.Category
-	Route   fiber.Router `name:"api-v1"`
-	// Validator helper.XValidator
+	Validator *helper.Validator
+	Service   *service.Category
+	Route     fiber.Router `name:"api-v1"`
 }
 
 func RegisterCategory(c Category) {
