@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/shaband/POS/internal/helper"
 	"github.com/shaband/POS/internal/model"
@@ -111,7 +109,6 @@ func (c Category) UpdateCategory(ctx *fiber.Ctx) error {
 			})
 		}
 	}
-	fmt.Println(err)
 	return err
 }
 

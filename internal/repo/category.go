@@ -77,6 +77,11 @@ func (r *Category) DeleteCategory(ctx context.Context, categoryID int) error {
 		ID: categoryID,
 	}
 
+	exists, _ := r.db.NewSelect().Model(&Category{}).Where("id = ?", categoryID).Exists(ctx)
+	if !exists {
+		return errors.New("Category doesn't exists")
+	}
+
 	_, err := r.db.NewDelete().
 		Model(&category).
 		WherePK().
