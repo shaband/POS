@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/shaband/POS/internal/helper"
 	"github.com/shaband/POS/internal/model"
@@ -100,14 +102,16 @@ func (c Category) UpdateCategory(ctx *fiber.Ctx) error {
 		if err == nil {
 			var results *model.Category
 			results, err = c.Service.UpdateCategory(ctx.Context(), id, CategoryDTO)
-			if err == nil {
-				return ctx.JSON(output.Category{
-					Id:   uint(results.ID),
-					Name: results.Name,
-				})
+			if err != nil {
+				return err
 			}
+			return ctx.JSON(output.Category{
+				Id:   uint(results.ID),
+				Name: results.Name,
+			})
 		}
 	}
+	fmt.Println(err)
 	return err
 }
 
