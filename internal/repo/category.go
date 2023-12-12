@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"errors"
 
 	"github.com/shaband/POS/internal/model"
 	"github.com/shaband/POS/internal/model/dto"
@@ -51,21 +52,24 @@ func (r *Category) UpdateCategory(ctx context.Context, categoryID int, categoryD
 		Name:       categoryDTO.Name,
 		CategoryID: categoryDTO.CategoryId,
 	}
-	exists, err := r.db.NewSelect().Model(&Category{}).WherePK(string(categoryID)).Exists(ctx)
-	if exists {
-		q := r.db.NewUpdate().
-			Model(&category).
-			WherePK().
-			Column("name", "category_id")
-		if category.CategoryID == 0 {
-			q.ExcludeColumn("category_id")
-		}
-		_, err = q.Exec(ctx)
+	exists, _ := r.db.NewSelect().Model(&Category{}).Where("id = ?", categoryID).Exists(ctx)
+	if !exists {
+		return nil, errors.New("Category doesn't exists")
 	}
-	if err != nil {
-		return nil, err
+
+	q := r.db.NewUpdate().
+		Model(&category).
+		WherePK().
+		Column("name", "category_id")
+	if category.CategoryID == 0 {
+		q.ExcludeColumn("category_id")
 	}
-	return &category, err
+	_, err := q.Exec(ctx)
+
+	if err == nil {
+		return &category, err
+	}
+	return nil, err
 }
 
 func (r *Category) DeleteCategory(ctx context.Context, categoryID int) error {
