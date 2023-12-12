@@ -51,14 +51,17 @@ func (r *Category) UpdateCategory(ctx context.Context, categoryID int, categoryD
 		Name:       categoryDTO.Name,
 		CategoryID: categoryDTO.CategoryId,
 	}
-	q := r.db.NewUpdate().
-		Model(&category).
-		WherePK().
-		Column("name", "category_id")
-	if category.CategoryID == 0 {
-		q.ExcludeColumn("category_id")
+	exists, err := r.db.NewSelect().Model(&Category{}).WherePK(string(categoryID)).Exists(ctx)
+	if exists {
+		q := r.db.NewUpdate().
+			Model(&category).
+			WherePK().
+			Column("name", "category_id")
+		if category.CategoryID == 0 {
+			q.ExcludeColumn("category_id")
+		}
+		_, err = q.Exec(ctx)
 	}
-	_, err := q.Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
