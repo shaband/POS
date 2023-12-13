@@ -17,3 +17,4 @@ type UpdateUserDTO struct {
 	PasswordConfirmation string `example:"123"                 json:"password_confirmation" valid:"optional"`
 	// Image                multipart.File `json:"image"                  valid:"optional"`
 }
+

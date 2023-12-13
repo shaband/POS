@@ -3,11 +3,14 @@ package http
 import (
 	"time"
 
+	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/helmet"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 )
 
 // @title			POS API
@@ -22,6 +25,9 @@ import (
 // @BasePath		/api/v1
 func Create() *fiber.App {
 	app := fiber.New(fiber.Config{
+		JSONEncoder: json.Marshal,
+		JSONDecoder: json.Unmarshal,
+
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
 			return c.Status(fiber.StatusBadRequest).JSON(GlobalErrorHandlerResp{
 				Success: false,
@@ -38,6 +44,8 @@ func Create() *fiber.App {
 
 		Expiration: time.Second * 60,
 	}))
+	app.Use(helmet.New())
+	app.Use(requestid.New())
 
 	return app
 }

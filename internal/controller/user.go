@@ -14,6 +14,7 @@ import (
 
 type User struct {
 	fx.In
+	Encryptor *helper.Encryptor
 	Validator *helper.Validator
 	Service   *service.User
 	Route     fiber.Router `name:"api-v1"`
@@ -73,6 +74,8 @@ func (c User) AddUser(ctx *fiber.Ctx) error {
 	if !Matched {
 		return errors.New("Password doesn't match password confirmation")
 	}
+	hashed, _ := c.Encryptor.HashPassword(UserDTO.Password)
+	UserDTO.Password = hashed
 	isValid, err := c.Validator.Validate(UserDTO)
 	if isValid {
 		results, err := c.Service.AddUser(ctx.Context(), UserDTO)
@@ -108,6 +111,8 @@ func (c User) UpdateUser(ctx *fiber.Ctx) error {
 		if !Matched {
 			return errors.New("Password doesn't match password confirmation")
 		}
+		hashed, _ := c.Encryptor.HashPassword(UserDTO.Password)
+		UserDTO.Password = hashed
 	}
 	isValid, err := c.Validator.Validate(UserDTO)
 	if isValid {

@@ -6,6 +6,7 @@ toolchain go1.21.4
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2
+	github.com/goccy/go-json v0.10.2
 	github.com/gofiber/fiber/v2 v2.51.0
 	github.com/gofiber/swagger v0.1.14
 	github.com/joho/godotenv v1.5.1
@@ -18,7 +19,7 @@ require (
 	github.com/uptrace/bun/extra/bundebug v1.1.16
 	github.com/urfave/cli/v2 v2.26.0
 	go.uber.org/fx v1.20.1
-	gopkg.in/guregu/null.v4 v4.0.0
+	golang.org/x/crypto v0.16.0
 )
 
 require (
@@ -56,7 +57,6 @@ require (
 	go.uber.org/dig v1.17.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect
-	golang.org/x/crypto v0.16.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/tools v0.16.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
