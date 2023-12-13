@@ -12,9 +12,9 @@ create table public.users (
     phone text not null,
     password text not null,
     image text 
-);
-create unique index users_id_uindex on public.users (id)
-where deleted_at is null;
+    );
+    create unique index users_id_uindex on public.users (id)
+    where deleted_at is null;
 
 create unique index users_email_uindex on public.users (email)
 where deleted_at is null;

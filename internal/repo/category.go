@@ -52,7 +52,9 @@ func (r *Category) UpdateCategory(ctx context.Context, categoryID int, categoryD
 		Name:       categoryDTO.Name,
 		CategoryID: categoryDTO.CategoryId,
 	}
-	exists, _ := r.db.NewSelect().Model(&Category{}).Where("id = ?", categoryID).Exists(ctx)
+	exists, _ := r.db.NewSelect().Model(&model.Category{
+		ID: categoryID,
+	}).Exists(ctx)
 	if !exists {
 		return nil, errors.New("Category doesn't exists")
 	}
@@ -77,7 +79,7 @@ func (r *Category) DeleteCategory(ctx context.Context, categoryID int) error {
 		ID: categoryID,
 	}
 
-	exists, _ := r.db.NewSelect().Model(&Category{}).Where("id = ?", categoryID).Exists(ctx)
+	exists, _ := r.db.NewSelect().Model(category).Where("id = ?", categoryID).Exists(ctx)
 	if !exists {
 		return errors.New("Category doesn't exists")
 	}

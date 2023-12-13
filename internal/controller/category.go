@@ -78,8 +78,8 @@ func (c Category) AddCategory(ctx *fiber.Ctx) error {
 
 // UpdateCategories godoc
 //
-//	@Summary		Update New Category
-//	@Description	Update New Category
+//	@Summary		Update  Category
+//	@Description	Update  Category
 //	@Tags			categories
 //	@Accept			json
 //	@Produce		json

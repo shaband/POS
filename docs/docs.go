@@ -89,7 +89,7 @@ const docTemplate = `{
         },
         "/categories/{category_id}": {
             "patch": {
-                "description": "Update New Category",
+                "description": "Update  Category",
                 "consumes": [
                     "application/json"
                 ],
@@ -99,7 +99,7 @@ const docTemplate = `{
                 "tags": [
                     "categories"
                 ],
-                "summary": "Update New Category",
+                "summary": "Update  Category",
                 "parameters": [
                     {
                         "description": "category data",
@@ -165,6 +165,149 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/users": {
+            "get": {
+                "description": "get All Users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "get All Users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/output.User"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add New User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Add New User",
+                "parameters": [
+                    {
+                        "description": "user data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateUserDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/output.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "delete": {
+                "description": "delete  User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "delete  User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "patch": {
+                "description": "Update  User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update  User",
+                "parameters": [
+                    {
+                        "description": "user data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateUserDTO"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "user id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -174,6 +317,56 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "category1"
+                }
+            }
+        },
+        "dto.CreateUserDTO": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "shaband@shaband.com"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "shaband"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "password_confirmation": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0123456789"
+                }
+            }
+        },
+        "dto.UpdateUserDTO": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "shaband@shaband.com"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "shaband"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "password_confirmation": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0123456789"
                 }
             }
         },
@@ -191,6 +384,38 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "category1"
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },
@@ -217,6 +442,31 @@ const docTemplate = `{
                 "success": {
                     "type": "boolean",
                     "example": false
+                }
+            }
+        },
+        "output.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "shaband@shaband.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "image": {
+                    "type": "string",
+                    "example": "http://pos.test/image.jpg"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "shaband"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "123456789"
                 }
             }
         }

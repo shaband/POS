@@ -6,6 +6,42 @@ definitions:
         example: category1
         type: string
     type: object
+  dto.CreateUserDTO:
+    properties:
+      email:
+        example: shaband@shaband.com
+        type: string
+      name:
+        example: shaband
+        type: string
+      password:
+        example: "123"
+        type: string
+      password_confirmation:
+        example: "123"
+        type: string
+      phone:
+        example: "0123456789"
+        type: string
+    type: object
+  dto.UpdateUserDTO:
+    properties:
+      email:
+        example: shaband@shaband.com
+        type: string
+      name:
+        example: shaband
+        type: string
+      password:
+        example: "123"
+        type: string
+      password_confirmation:
+        example: "123"
+        type: string
+      phone:
+        example: "0123456789"
+        type: string
+    type: object
   model.Category:
     properties:
       category_id:
@@ -16,6 +52,27 @@ definitions:
         type: integer
       name:
         example: category1
+        type: string
+    type: object
+  model.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      updatedAt:
         type: string
     type: object
   output.Category:
@@ -35,6 +92,24 @@ definitions:
       success:
         example: false
         type: boolean
+    type: object
+  output.User:
+    properties:
+      email:
+        example: shaband@shaband.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      image:
+        example: http://pos.test/image.jpg
+        type: string
+      name:
+        example: shaband
+        type: string
+      phone:
+        example: "123456789"
+        type: string
     type: object
 host: localhost:3500
 info:
@@ -95,7 +170,7 @@ paths:
     patch:
       consumes:
       - application/json
-      description: Update New Category
+      description: Update  Category
       parameters:
       - description: category data
         in: body
@@ -119,7 +194,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/output.HTTPError'
-      summary: Update New Category
+      summary: Update  Category
       tags:
       - categories
   /categories/{id}:
@@ -143,4 +218,98 @@ paths:
       summary: delete  Category
       tags:
       - categories
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get All Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/output.User'
+            type: array
+      summary: get All Users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Add New User
+      parameters:
+      - description: user data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/output.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Add New User
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete  User
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted successfully
+          schema:
+            type: string
+      summary: delete  User
+      tags:
+      - users
+  /users/{user_id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update  User
+      parameters:
+      - description: user data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDTO'
+      - description: user id
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Update  User
+      tags:
+      - users
 swagger: "2.0"
