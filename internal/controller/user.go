@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"errors"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/shaband/POS/internal/helper"
 	"github.com/shaband/POS/internal/model"
@@ -67,6 +69,10 @@ func (c *User) GetUsers(ctx *fiber.Ctx) error {
 func (c User) AddUser(ctx *fiber.Ctx) error {
 	UserDTO := new(dto.CreateUserDTO)
 	_ = ctx.BodyParser(UserDTO)
+	Matched := c.Validator.StringMatches(UserDTO.Password, UserDTO.PasswordConfirmation)
+	if !Matched {
+		return errors.New("Password doesn't match password confirmation")
+	}
 	isValid, err := c.Validator.Validate(UserDTO)
 	if isValid {
 		results, err := c.Service.AddUser(ctx.Context(), UserDTO)
@@ -97,7 +103,12 @@ func (c User) AddUser(ctx *fiber.Ctx) error {
 func (c User) UpdateUser(ctx *fiber.Ctx) error {
 	UserDTO := new(dto.UpdateUserDTO)
 	_ = ctx.BodyParser(UserDTO)
-
+	if UserDTO.Password != "" {
+		Matched := c.Validator.StringMatches(UserDTO.Password, UserDTO.PasswordConfirmation)
+		if !Matched {
+			return errors.New("Password doesn't match password confirmation")
+		}
+	}
 	isValid, err := c.Validator.Validate(UserDTO)
 	if isValid {
 		id, err := ctx.ParamsInt("id")
