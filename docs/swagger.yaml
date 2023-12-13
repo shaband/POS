@@ -24,6 +24,24 @@ definitions:
         example: "0123456789"
         type: string
     type: object
+  dto.UpdateClientDTO:
+    properties:
+      email:
+        example: shaband@shaband.com
+        type: string
+      is_client:
+        example: true
+        type: boolean
+      is_supplier:
+        example: true
+        type: boolean
+      name:
+        example: shaband
+        type: string
+      phone:
+        example: "0123456789"
+        type: string
+    type: object
   dto.UpdateUserDTO:
     properties:
       email:
@@ -54,6 +72,27 @@ definitions:
         example: category1
         type: string
     type: object
+  model.Client:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      is_client:
+        type: boolean
+      is_supplier:
+        type: boolean
+      name:
+        type: string
+      phone:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   model.User:
     properties:
       createdAt:
@@ -64,8 +103,6 @@ definitions:
         type: string
       id:
         type: integer
-      image:
-        type: string
       name:
         type: string
       password:
@@ -82,6 +119,27 @@ definitions:
         type: integer
       name:
         example: category1
+        type: string
+    type: object
+  output.Client:
+    properties:
+      email:
+        example: shaband@shaband.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      isClient:
+        example: true
+        type: boolean
+      isSupplier:
+        example: true
+        type: boolean
+      name:
+        example: shaband
+        type: string
+      phone:
+        example: "123456789"
         type: string
     type: object
   output.HTTPError:
@@ -101,9 +159,6 @@ definitions:
       id:
         example: 1
         type: integer
-      image:
-        example: http://pos.test/image.jpg
-        type: string
       name:
         example: shaband
         type: string
@@ -218,6 +273,122 @@ paths:
       summary: delete  Category
       tags:
       - categories
+  /clients:
+    get:
+      consumes:
+      - application/json
+      description: get All Clients
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/output.Client'
+            type: array
+      summary: get All Clients
+      tags:
+      - clients
+    post:
+      consumes:
+      - multipart/form-data
+      description: Add New Client
+      parameters:
+      - description: enter client name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: enter client email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: enter client phone
+        in: formData
+        name: phone
+        required: true
+        type: number
+      - description: ' is client ?'
+        in: formData
+        name: is_client
+        type: boolean
+      - description: is supplier ?
+        in: formData
+        name: is_supplier
+        type: boolean
+      - description: image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - multipart/form-data
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/output.Client'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Add New Client
+      tags:
+      - clients
+  /clients/{client_id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update  Client
+      parameters:
+      - description: client data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateClientDTO'
+      - description: client id
+        in: path
+        name: client_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Client'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Update  Client
+      tags:
+      - clients
+  /clients/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete  Client
+      parameters:
+      - description: Client ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted successfully
+          schema:
+            type: string
+      summary: delete  Client
+      tags:
+      - clients
   /users:
     get:
       consumes:

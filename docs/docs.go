@@ -166,6 +166,180 @@ const docTemplate = `{
                 }
             }
         },
+        "/clients": {
+            "get": {
+                "description": "get All Clients",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "clients"
+                ],
+                "summary": "get All Clients",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/output.Client"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add New Client",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Add New Client",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enter client name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "enter client email",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "enter client phone",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": " is client ?",
+                        "name": "is_client",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "is supplier ?",
+                        "name": "is_supplier",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "image",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/output.Client"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/clients/{client_id}": {
+            "patch": {
+                "description": "Update  Client",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "clients"
+                ],
+                "summary": "Update  Client",
+                "parameters": [
+                    {
+                        "description": "client data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateClientDTO"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "client id",
+                        "name": "client_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Client"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/clients/{id}": {
+            "delete": {
+                "description": "delete  Client",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "clients"
+                ],
+                "summary": "delete  Client",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Client ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "get All Users",
@@ -345,6 +519,31 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.UpdateClientDTO": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "shaband@shaband.com"
+                },
+                "is_client": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "is_supplier": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "shaband"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0123456789"
+                }
+            }
+        },
         "dto.UpdateUserDTO": {
             "type": "object",
             "properties": {
@@ -387,7 +586,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.User": {
+        "model.Client": {
             "type": "object",
             "properties": {
                 "createdAt": {
@@ -402,8 +601,37 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "image": {
+                "is_client": {
+                    "type": "boolean"
+                },
+                "is_supplier": {
+                    "type": "boolean"
+                },
+                "name": {
                     "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -432,6 +660,35 @@ const docTemplate = `{
                 }
             }
         },
+        "output.Client": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "shaband@shaband.com"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "isClient": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "isSupplier": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "shaband"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "123456789"
+                }
+            }
+        },
         "output.HTTPError": {
             "type": "object",
             "properties": {
@@ -455,10 +712,6 @@ const docTemplate = `{
                 "id": {
                     "type": "integer",
                     "example": 1
-                },
-                "image": {
-                    "type": "string",
-                    "example": "http://pos.test/image.jpg"
                 },
                 "name": {
                     "type": "string",

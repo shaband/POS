@@ -60,15 +60,11 @@ func (r *Category) UpdateCategory(ctx context.Context, categoryID int, categoryD
 		return nil, errors.New("Category doesn't exists")
 	}
 
-	q := r.db.NewUpdate().
+	_, err := r.db.NewUpdate().
 		Model(&category).
 		OmitZero().
 		WherePK().
-		Column("name", "category_id")
-	if category.CategoryID == 0 {
-		q.ExcludeColumn("category_id")
-	}
-	_, err := q.Exec(ctx)
+		Exec(ctx)
 
 	if err == nil {
 		return &category, err

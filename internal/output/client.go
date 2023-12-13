@@ -1,11 +1,11 @@
 package output
 
-type User struct {
+type Client struct {
 	Id         uint   `example:"1"`
 	Name       string `example:"shaband"`
 	Email      string `example:"shaband@shaband.com"`
 	Phone      string `example:"123456789"`
-	isSupplier string `example:"true"`
-	isClient   string `example:"false"`
+	IsClient   bool   `example:"true"`
+	IsSupplier bool   `example:"true"`
 	// Image string `example:"http://pos.test/image.jpg"`
 }
