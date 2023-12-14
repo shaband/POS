@@ -39,7 +39,7 @@ func (c Category) GetCategories(ctx *fiber.Ctx) error {
 		var results []output.Category
 		for _, category := range categories {
 			results = append(results, output.Category{
-				Id:   uint(category.ID),
+				ID:   uint(category.ID),
 				Name: category.Name,
 			})
 		}
@@ -68,7 +68,7 @@ func (c Category) AddCategory(ctx *fiber.Ctx) error {
 		results, err := c.Service.AddCategory(ctx.Context(), CategoryDTO)
 		if err == nil {
 			return ctx.JSON(output.Category{
-				Id:   uint(results.ID),
+				ID:   uint(results.ID),
 				Name: results.Name,
 			})
 		}
@@ -104,7 +104,7 @@ func (c Category) UpdateCategory(ctx *fiber.Ctx) error {
 				return err
 			}
 			return ctx.JSON(output.Category{
-				Id:   uint(results.ID),
+				ID:   uint(results.ID),
 				Name: results.Name,
 			})
 		}

@@ -6,12 +6,12 @@ import (
 	"github.com/uptrace/bun"
 )
 
-type Category struct {
+type Inventory struct {
 	bun.BaseModel `bun:"categories"                                  swaggerignore:"true"`
 	ID            int       `bun:",pk,autoincrement"                           example:"1"          json:"id"`
 	CreatedAt     time.Time `bun:",nullzero,notnull,default:current_timestamp" swaggerignore:"true"`
 	UpdatedAt     time.Time `bun:",nullzero,notnull,default:current_timestamp" swaggerignore:"true"`
 	DeletedAt     time.Time `bun:",soft_delete,nullzero"                       swaggerignore:"true"`
-	Name          string    `bun:",nullzero,notnull"                           example:"category1"  json:"name"`
-	CategoryID    int       `bun:",nullzero,notnull"                           example:"1"          json:"category_id"`
+	Name          string    `example:"category1"                               json:"name"`
+	Address       string    `bun:",nullzero,notnull"                           example:"address1"   json:"address"`
 }

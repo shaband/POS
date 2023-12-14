@@ -9,5 +9,7 @@ func Module() fx.Option {
 		NewUser,
 		NewCategory,
 		NewClient,
+		NewProduct,
+		NewInventory,
 	))
 }

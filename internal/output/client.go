@@ -1,7 +1,7 @@
 package output
 
 type Client struct {
-	Id         uint   `example:"1"`
+	ID         uint   `example:"1"`
 	Name       string `example:"shaband"`
 	Email      string `example:"shaband@shaband.com"`
 	Phone      string `example:"123456789"`

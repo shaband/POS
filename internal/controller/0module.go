@@ -8,5 +8,6 @@ func Module() fx.Option {
 		RegisterSwagger,
 		RegisterCategory,
 		RegisterClient,
+		RegisterProduct,
 	))
 }

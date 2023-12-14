@@ -45,7 +45,7 @@ func (c *User) GetUsers(ctx *fiber.Ctx) error {
 
 	for _, user := range users {
 		result = append(result, &output.User{
-			Id:    uint(user.ID),
+			ID:    uint(user.ID),
 			Name:  user.Name,
 			Email: user.Email,
 			Phone: user.Phone,
@@ -81,7 +81,7 @@ func (c User) AddUser(ctx *fiber.Ctx) error {
 		results, err := c.Service.AddUser(ctx.Context(), UserDTO)
 		if err == nil {
 			return ctx.JSON(output.User{
-				Id:   uint(results.ID),
+				ID:   uint(results.ID),
 				Name: results.Name,
 			})
 		}
@@ -124,7 +124,7 @@ func (c User) UpdateUser(ctx *fiber.Ctx) error {
 				return err
 			}
 			return ctx.JSON(output.User{
-				Id:   uint(results.ID),
+				ID:   uint(results.ID),
 				Name: results.Name,
 			})
 		}
