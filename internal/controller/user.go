@@ -65,8 +65,8 @@ func (c *User) GetUsers(ctx *fiber.Ctx) error {
 //	@param			request	body		dto.CreateUserDTO	true	"user data"
 //	@Success		200		{object}	output.User
 //
-// @Failure      	400  	{object}  	output.HTTPError
-// @Router			/users [Post]
+//	@Failure		400		{object}	output.HTTPError
+//	@Router			/users [Post]
 func (c User) AddUser(ctx *fiber.Ctx) error {
 	UserDTO := new(dto.CreateUserDTO)
 	_ = ctx.BodyParser(UserDTO)
@@ -96,13 +96,13 @@ func (c User) AddUser(ctx *fiber.Ctx) error {
 //	@Tags			users
 //	@Accept			json
 //	@Produce		json
-//	@param			request		body		dto.UpdateUserDTO	true	"user data"
-//	@param			user_id	path		int				true	"user id"
+//	@param			request	body		dto.UpdateUserDTO	true	"user data"
+//	@param			user_id	path		int					true	"user id"
 //
-//	@Success		200			{object}	model.User
+//	@Success		200		{object}	model.User
 //
-// @Failure      	400  		{object}  	output.HTTPError
-// @Router			/users/{user_id} [Patch]
+//	@Failure		400		{object}	output.HTTPError
+//	@Router			/users/{user_id} [Patch]
 func (c User) UpdateUser(ctx *fiber.Ctx) error {
 	UserDTO := new(dto.UpdateUserDTO)
 	_ = ctx.BodyParser(UserDTO)

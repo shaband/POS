@@ -8,6 +8,7 @@ func Module() fx.Option {
 	return fx.Module("helper", fx.Provide(
 		RegisterValidator,
 		RegisterEncryptor,
+		RegisterUploader,
 	),
 	)
 }

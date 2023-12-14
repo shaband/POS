@@ -12,7 +12,7 @@ import (
 
 type Client struct {
 	fx.In
-	Encryptor *helper.Encryptor
+	Uploader  *helper.Uploader
 	Validator *helper.Validator
 	Service   *service.Client
 	Route     fiber.Router `name:"api-v1"`
@@ -60,19 +60,23 @@ func (c *Client) GetClients(ctx *fiber.Ctx) error {
 //	@Tags			clients
 //	@Accept			mpfd
 //	@Produce		mpfd
-//	@param			name	    formData		string	true	"enter client name"
-//	@param			email	    formData		string	true	"enter client email"
-//	@param			phone	    formData		number	true	"enter client phone"
-//	@param			is_client	formData		boolean	false	" is client ?"
-//	@param			is_supplier	formData		boolean	false	"is supplier ?"
-//	@param			image    formData	file		        true	"image"
-//	@Success		200		{object}	output.Client
+//	@param			name		formData	string	true	"enter client name"
+//	@param			email		formData	string	true	"enter client email"
+//	@param			phone		formData	number	true	"enter client phone"
+//	@param			is_client	formData	boolean	false	" is client ?"
+//	@param			is_supplier	formData	boolean	false	"is supplier ?"
+//	@param			image		formData	file	true	"image"
+//	@Success		200			{object}	output.Client
 //
-// @Failure      	400  	{object}  	output.HTTPError
-// @Router			/clients [Post]
+//	@Failure		400			{object}	output.HTTPError
+//	@Router			/clients [Post]
 func (c Client) AddClient(ctx *fiber.Ctx) error {
 	ClientDTO := new(dto.CreateClientDTO)
 	_ = ctx.BodyParser(ClientDTO)
+	path, err := c.Uploader.SaveFIle(ctx, "image", "clients")
+	if err == nil {
+		ClientDTO.Image = path
+	}
 	isValid, err := c.Validator.Validate(ClientDTO)
 	if isValid {
 		results, err := c.Service.AddClient(ctx.Context(), ClientDTO)
@@ -91,19 +95,28 @@ func (c Client) AddClient(ctx *fiber.Ctx) error {
 //	@Summary		Update  Client
 //	@Description	Update  Client
 //	@Tags			clients
-//	@Accept			json
-//	@Produce		json
-//	@param			request		body		dto.UpdateClientDTO	true	"client data"
-//	@param			client_id	path		int				true	"client id"
+//	@Accept			mpfd
+//	@Produce		mpfd
+//	@param			name		formData	string	true	"enter client name"
+//	@param			email		formData	string	true	"enter client email"
+//	@param			phone		formData	number	true	"enter client phone"
+//	@param			is_client	formData	boolean	false	"is client ?"
+//	@param			is_supplier	formData	boolean	false	"is supplier ?"
+//	@param			image		formData	file	true	"image"
+//	@param			client_id	path		int		true	"client id"
 //
 //	@Success		200			{object}	model.Client
 //
-// @Failure      	400  		{object}  	output.HTTPError
-// @Router			/clients/{client_id} [Patch]
+//	@Failure		400			{object}	output.HTTPError
+//	@Router			/clients/{client_id} [Patch]
 func (c Client) UpdateClient(ctx *fiber.Ctx) error {
 	ClientDTO := new(dto.UpdateClientDTO)
 	_ = ctx.BodyParser(ClientDTO)
 
+	path, err := c.Uploader.SaveFIle(ctx, "image", "clients")
+	if err == nil {
+		ClientDTO.Image = path
+	}
 	isValid, err := c.Validator.Validate(ClientDTO)
 	if isValid {
 		id, err := ctx.ParamsInt("id")

@@ -58,8 +58,8 @@ func (c Category) GetCategories(ctx *fiber.Ctx) error {
 //	@param			request	body		dto.CategoryDTO	true	"category data"
 //	@Success		200		{object}	output.Category
 //
-// @Failure      	400  	{object}  	output.HTTPError
-// @Router			/categories [Post]
+//	@Failure		400		{object}	output.HTTPError
+//	@Router			/categories [Post]
 func (c Category) AddCategory(ctx *fiber.Ctx) error {
 	CategoryDTO := new(dto.CategoryDTO)
 	_ = ctx.BodyParser(CategoryDTO)
@@ -88,8 +88,8 @@ func (c Category) AddCategory(ctx *fiber.Ctx) error {
 //
 //	@Success		200			{object}	model.Category
 //
-// @Failure      	400  		{object}  	output.HTTPError
-// @Router			/categories/{category_id} [Patch]
+//	@Failure		400			{object}	output.HTTPError
+//	@Router			/categories/{category_id} [Patch]
 func (c Category) UpdateCategory(ctx *fiber.Ctx) error {
 	CategoryDTO := new(dto.CategoryDTO)
 	_ = ctx.BodyParser(CategoryDTO)
