@@ -36,11 +36,12 @@ func RegisterInventory(c Inventory) {
 func (c Inventory) GetInventories(ctx *fiber.Ctx) error {
 	inventories, err := c.Service.GetInventories(ctx.Context())
 	if err == nil {
-		var results []output.Inventory
+		var results []output.Inventory = []output.Inventory{}
 		for _, inventory := range inventories {
 			results = append(results, output.Inventory{
-				ID:   uint(inventory.ID),
-				Name: inventory.Name,
+				ID:      uint(inventory.ID),
+				Name:    inventory.Name,
+				Address: inventory.Address,
 			})
 		}
 		return ctx.JSON(results)
@@ -68,8 +69,9 @@ func (c Inventory) AddInventory(ctx *fiber.Ctx) error {
 		results, err := c.Service.AddInventory(ctx.Context(), InventoryDTO)
 		if err == nil {
 			return ctx.JSON(output.Inventory{
-				ID:   uint(results.ID),
-				Name: results.Name,
+				ID:      uint(results.ID),
+				Name:    results.Name,
+				Address: results.Address,
 			})
 		}
 	}
@@ -83,12 +85,12 @@ func (c Inventory) AddInventory(ctx *fiber.Ctx) error {
 //	@Tags			inventories
 //	@Accept			json
 //	@Produce		json
-//	@param			request		    body		dto.InventoryDTO	true	"inventory data"
-//	@param			inventory_id	path		int				    true	"inventory id"
+//	@param			request			body		dto.InventoryDTO	true	"inventory data"
+//	@param			inventory_id	path		int					true	"inventory id"
 //
-//	@Success		200			{object}	model.Inventory
+//	@Success		200				{object}	model.Inventory
 //
-//	@Failure		400			{object}	output.HTTPError
+//	@Failure		400				{object}	output.HTTPError
 //	@Router			/inventories/{inventory_id} [Patch]
 func (c Inventory) UpdateInventory(ctx *fiber.Ctx) error {
 	InventoryDTO := new(dto.InventoryDTO)
@@ -104,8 +106,9 @@ func (c Inventory) UpdateInventory(ctx *fiber.Ctx) error {
 				return err
 			}
 			return ctx.JSON(output.Inventory{
-				ID:   uint(results.ID),
-				Name: results.Name,
+				ID:      uint(results.ID),
+				Name:    results.Name,
+				Address: results.Address,
 			})
 		}
 	}

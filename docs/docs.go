@@ -265,10 +265,10 @@ const docTemplate = `{
             "patch": {
                 "description": "Update  Client",
                 "consumes": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "produces": [
-                    "application/json"
+                    "multipart/form-data"
                 ],
                 "tags": [
                     "clients"
@@ -276,13 +276,44 @@ const docTemplate = `{
                 "summary": "Update  Client",
                 "parameters": [
                     {
-                        "description": "client data",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.UpdateClientDTO"
-                        }
+                        "type": "string",
+                        "description": "enter client name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "enter client email",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "enter client phone",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "is client ?",
+                        "name": "is_client",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "is supplier ?",
+                        "name": "is_supplier",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "image",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "integer",
@@ -335,6 +366,354 @@ const docTemplate = `{
                         "description": "deleted successfully",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/inventories": {
+            "get": {
+                "description": "get All Inventories",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "inventories"
+                ],
+                "summary": "get All Inventories",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/output.Inventory"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add New Inventory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "inventories"
+                ],
+                "summary": "Add New Inventory",
+                "parameters": [
+                    {
+                        "description": "inventory data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.InventoryDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/output.Inventory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/inventories/{id}": {
+            "delete": {
+                "description": "delete  Inventory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "inventories"
+                ],
+                "summary": "delete  Inventory",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Inventory ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/inventories/{inventory_id}": {
+            "patch": {
+                "description": "Update  Inventory",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "inventories"
+                ],
+                "summary": "Update  Inventory",
+                "parameters": [
+                    {
+                        "description": "inventory data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.InventoryDTO"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "inventory id",
+                        "name": "inventory_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Inventory"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "description": "get All Products",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "get All Products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/output.Product"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add New Product",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Add New Product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enter product name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "enter product code",
+                        "name": "code",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "enter product cost price",
+                        "name": "cost_price",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "enter product sell price",
+                        "name": "sell_price",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "category ID",
+                        "name": "category_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "image",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/output.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "delete": {
+                "description": "delete  Product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "delete  Product",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{product_id}": {
+            "patch": {
+                "description": "Update  Product",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Update  Product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "enter product name",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "enter product code",
+                        "name": "code",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "enter product cost price",
+                        "name": "cost_price",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "enter product sell price",
+                        "name": "sell_price",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "category ID",
+                        "name": "category_id",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "image",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
                         }
                     }
                 }
@@ -519,28 +898,16 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.UpdateClientDTO": {
+        "dto.InventoryDTO": {
             "type": "object",
             "properties": {
-                "email": {
+                "address": {
                     "type": "string",
-                    "example": "shaband@shaband.com"
-                },
-                "is_client": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "is_supplier": {
-                    "type": "boolean",
-                    "example": true
+                    "example": "address1"
                 },
                 "name": {
                     "type": "string",
-                    "example": "shaband"
-                },
-                "phone": {
-                    "type": "string",
-                    "example": "0123456789"
+                    "example": "inventory1"
                 }
             }
         },
@@ -615,6 +982,56 @@ const docTemplate = `{
                 },
                 "updatedAt": {
                     "type": "string"
+                }
+            }
+        },
+        "model.Inventory": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "address1"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "category1"
+                }
+            }
+        },
+        "model.Product": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "code": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "cost_price": {
+                    "type": "string",
+                    "example": "10"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "image": {
+                    "type": "string",
+                    "example": "http://lorempicsm/100.jpg"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "category1"
+                },
+                "sell_price": {
+                    "type": "string",
+                    "example": "100"
                 }
             }
         },
@@ -699,6 +1116,52 @@ const docTemplate = `{
                 "success": {
                     "type": "boolean",
                     "example": false
+                }
+            }
+        },
+        "output.Inventory": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "address1"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "inventory"
+                }
+            }
+        },
+        "output.Product": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "124"
+                },
+                "cost_price": {
+                    "type": "string",
+                    "example": "5"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "image": {
+                    "type": "string",
+                    "example": "http://image.com/image.jpg"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "product 1"
+                },
+                "sell_price": {
+                    "type": "string",
+                    "example": "10"
                 }
             }
         },

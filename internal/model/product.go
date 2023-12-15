@@ -7,7 +7,7 @@ import (
 )
 
 type Product struct {
-	bun.BaseModel `bun:"categories"                                  swaggerignore:"true"`
+	bun.BaseModel `bun:"products"                                    swaggerignore:"true"`
 	ID            int       `bun:",pk,autoincrement"                           example:"1"                         json:"id"`
 	CreatedAt     time.Time `bun:",nullzero,notnull,default:current_timestamp" swaggerignore:"true"`
 	UpdatedAt     time.Time `bun:",nullzero,notnull,default:current_timestamp" swaggerignore:"true"`

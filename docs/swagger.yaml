@@ -24,22 +24,13 @@ definitions:
         example: "0123456789"
         type: string
     type: object
-  dto.UpdateClientDTO:
+  dto.InventoryDTO:
     properties:
-      email:
-        example: shaband@shaband.com
+      address:
+        example: address1
         type: string
-      is_client:
-        example: true
-        type: boolean
-      is_supplier:
-        example: true
-        type: boolean
       name:
-        example: shaband
-        type: string
-      phone:
-        example: "0123456789"
+        example: inventory1
         type: string
     type: object
   dto.UpdateUserDTO:
@@ -91,6 +82,42 @@ definitions:
       phone:
         type: string
       updatedAt:
+        type: string
+    type: object
+  model.Inventory:
+    properties:
+      address:
+        example: address1
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: category1
+        type: string
+    type: object
+  model.Product:
+    properties:
+      category_id:
+        example: 1
+        type: integer
+      code:
+        example: "123"
+        type: string
+      cost_price:
+        example: "10"
+        type: string
+      id:
+        example: 1
+        type: integer
+      image:
+        example: http://lorempicsm/100.jpg
+        type: string
+      name:
+        example: category1
+        type: string
+      sell_price:
+        example: "100"
         type: string
     type: object
   model.User:
@@ -150,6 +177,39 @@ definitions:
       success:
         example: false
         type: boolean
+    type: object
+  output.Inventory:
+    properties:
+      address:
+        example: address1
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: inventory
+        type: string
+    type: object
+  output.Product:
+    properties:
+      code:
+        example: "124"
+        type: string
+      cost_price:
+        example: "5"
+        type: string
+      id:
+        example: 1
+        type: integer
+      image:
+        example: http://image.com/image.jpg
+        type: string
+      name:
+        example: product 1
+        type: string
+      sell_price:
+        example: "10"
+        type: string
     type: object
   output.User:
     properties:
@@ -340,22 +400,44 @@ paths:
   /clients/{client_id}:
     patch:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Update  Client
       parameters:
-      - description: client data
-        in: body
-        name: request
+      - description: enter client name
+        in: formData
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/dto.UpdateClientDTO'
+        type: string
+      - description: enter client email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: enter client phone
+        in: formData
+        name: phone
+        required: true
+        type: number
+      - description: is client ?
+        in: formData
+        name: is_client
+        type: boolean
+      - description: is supplier ?
+        in: formData
+        name: is_supplier
+        type: boolean
+      - description: image
+        in: formData
+        name: image
+        required: true
+        type: file
       - description: client id
         in: path
         name: client_id
         required: true
         type: integer
       produces:
-      - application/json
+      - multipart/form-data
       responses:
         "200":
           description: OK
@@ -389,6 +471,238 @@ paths:
       summary: delete  Client
       tags:
       - clients
+  /inventories:
+    get:
+      consumes:
+      - application/json
+      description: get All Inventories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/output.Inventory'
+            type: array
+      summary: get All Inventories
+      tags:
+      - inventories
+    post:
+      consumes:
+      - application/json
+      description: Add New Inventory
+      parameters:
+      - description: inventory data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.InventoryDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/output.Inventory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Add New Inventory
+      tags:
+      - inventories
+  /inventories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete  Inventory
+      parameters:
+      - description: Inventory ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted successfully
+          schema:
+            type: string
+      summary: delete  Inventory
+      tags:
+      - inventories
+  /inventories/{inventory_id}:
+    patch:
+      consumes:
+      - application/json
+      description: Update  Inventory
+      parameters:
+      - description: inventory data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.InventoryDTO'
+      - description: inventory id
+        in: path
+        name: inventory_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Inventory'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Update  Inventory
+      tags:
+      - inventories
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: get All Products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/output.Product'
+            type: array
+      summary: get All Products
+      tags:
+      - products
+    post:
+      consumes:
+      - multipart/form-data
+      description: Add New Product
+      parameters:
+      - description: enter product name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: enter product code
+        in: formData
+        name: code
+        required: true
+        type: string
+      - description: enter product cost price
+        in: formData
+        name: cost_price
+        required: true
+        type: number
+      - description: enter product sell price
+        in: formData
+        name: sell_price
+        type: number
+      - description: category ID
+        in: formData
+        name: category_id
+        type: integer
+      - description: image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - multipart/form-data
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/output.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Add New Product
+      tags:
+      - products
+  /products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete  Product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted successfully
+          schema:
+            type: string
+      summary: delete  Product
+      tags:
+      - products
+  /products/{product_id}:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: Update  Product
+      parameters:
+      - description: enter product name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: enter product code
+        in: formData
+        name: code
+        required: true
+        type: string
+      - description: enter product cost price
+        in: formData
+        name: cost_price
+        required: true
+        type: number
+      - description: enter product sell price
+        in: formData
+        name: sell_price
+        type: number
+      - description: category ID
+        in: formData
+        name: category_id
+        type: integer
+      - description: image
+        in: formData
+        name: image
+        required: true
+        type: file
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: integer
+      produces:
+      - multipart/form-data
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Update  Product
+      tags:
+      - products
   /users:
     get:
       consumes:

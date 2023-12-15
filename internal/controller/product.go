@@ -65,8 +65,8 @@ func (c *Product) GetProducts(ctx *fiber.Ctx) error {
 //	@param			name		formData	string	true	"enter product name"
 //	@param			code		formData	string	true	"enter product code"
 //	@param			cost_price	formData	number	true	"enter product cost price"
-//	@param			sell_price	formData	number	false	"enter product sell price"
-//	@param			category_id	formData	int		false	"category ID"
+//	@param			sell_price	formData	number	true	"enter product sell price"
+//	@param			category_id	formData	int		true	"category ID"
 //	@param			image		formData	file	true	"image"
 //	@Success		200			{object}	output.Product
 //
@@ -102,8 +102,8 @@ func (c Product) AddProduct(ctx *fiber.Ctx) error {
 //	@param			name		formData	string	true	"enter product name"
 //	@param			code		formData	string	true	"enter product code"
 //	@param			cost_price	formData	number	true	"enter product cost price"
-//	@param			sell_price	formData	number	false	"enter product sell price"
-//	@param			category_id	formData	int		false	"category ID"
+//	@param			sell_price	formData	number	true	"enter product sell price"
+//	@param			category_id	formData	int		true	"category ID"
 //	@param			image		formData	file	true	"image"
 //	@param			product_id	path		int		true	"Product ID"
 //
