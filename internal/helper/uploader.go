@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog/log"
+
 )
 
 type Uploader struct{}
@@ -16,8 +17,8 @@ func RegisterUploader() *Uploader {
 
 func (e *Uploader) SaveFIle(c *fiber.Ctx, inputName, prefix string) (string, error) {
 	file, err := c.FormFile(inputName)
-	log.Err(err).Msg("error on get file")
 	if err != nil {
+		log.Err(err).Msg("error on get file")
 		return "", err
 	}
 	path := "/storage/uploads/" + prefix + "_" + fmt.Sprint(time.Now().Unix()) + "_" + file.Filename

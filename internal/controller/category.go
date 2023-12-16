@@ -36,7 +36,7 @@ func RegisterCategory(c Category) {
 func (c Category) GetCategories(ctx *fiber.Ctx) error {
 	categories, err := c.Service.GetCategories(ctx.Context())
 	if err == nil {
-		var results []output.Category
+		 results:= []output.Category{}
 		for _, category := range categories {
 			results = append(results, output.Category{
 				ID:   uint(category.ID),

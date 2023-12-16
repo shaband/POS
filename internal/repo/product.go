@@ -7,6 +7,7 @@ import (
 	"github.com/shaband/POS/internal/model"
 	"github.com/shaband/POS/internal/model/dto"
 	"github.com/uptrace/bun"
+
 )
 
 type Product struct {
@@ -61,7 +62,7 @@ func (r Product) UpdateProduct(ctx context.Context, productID int, productDTO *d
 	if !exists {
 		return nil, errors.New("Product doesn't exists")
 	}
-	_, err := r.db.NewUpdate().Model(&product).WherePK().OmitZero().Exec(ctx)
+	_, err := r.db.NewUpdate().Model(product).WherePK().OmitZero().Exec(ctx)
 
 	return product, err
 }

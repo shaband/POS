@@ -8,6 +8,7 @@ import (
 	"github.com/shaband/POS/internal/output"
 	"github.com/shaband/POS/internal/service"
 	"go.uber.org/fx"
+
 )
 
 type Product struct {
@@ -67,7 +68,7 @@ func (c *Product) GetProducts(ctx *fiber.Ctx) error {
 //	@param			cost_price	formData	number	true	"enter product cost price"
 //	@param			sell_price	formData	number	true	"enter product sell price"
 //	@param			category_id	formData	int		true	"category ID"
-//	@param			image		formData	file	true	"image"
+//	@param			image		formData	file	false	"image"
 //	@Success		200			{object}	output.Product
 //
 //	@Failure		400			{object}	output.HTTPError
@@ -84,8 +85,12 @@ func (c Product) AddProduct(ctx *fiber.Ctx) error {
 		results, err := c.Service.AddProduct(ctx.Context(), ProductDTO)
 		if err == nil {
 			return ctx.JSON(output.Product{
-				ID:   results.ID,
-				Name: results.Name,
+				ID:        results.ID,
+				Name:      results.Name,
+				Code:      results.Code,
+				CostPrice: results.CostPrice,
+				SellPrice: results.SellPrice,
+				Image:     results.Image,
 			})
 		}
 	}
@@ -129,8 +134,12 @@ func (c Product) UpdateProduct(ctx *fiber.Ctx) error {
 				return err
 			}
 			return ctx.JSON(output.Product{
-				ID:   results.ID,
-				Name: results.Name,
+				ID:        results.ID,
+				Name:      results.Name,
+				Code:      results.Code,
+				CostPrice: results.CostPrice,
+				SellPrice: results.SellPrice,
+				Image:     results.Image,
 			})
 		}
 	}

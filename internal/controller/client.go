@@ -84,6 +84,8 @@ func (c Client) AddClient(ctx *fiber.Ctx) error {
 			return ctx.JSON(output.Client{
 				ID:   uint(results.ID),
 				Name: results.Name,
+				Email: results.Email,
+				Phone: results.Phone,
 			})
 		}
 	}
@@ -129,6 +131,8 @@ func (c Client) UpdateClient(ctx *fiber.Ctx) error {
 			return ctx.JSON(output.Client{
 				ID:   uint(results.ID),
 				Name: results.Name,
+				Email: results.Email,
+				Phone: results.Phone,
 			})
 		}
 	}
