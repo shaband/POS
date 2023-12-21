@@ -82,8 +82,8 @@ func (c Client) AddClient(ctx *fiber.Ctx) error {
 		results, err := c.Service.AddClient(ctx.Context(), ClientDTO)
 		if err == nil {
 			return ctx.JSON(output.Client{
-				ID:   uint(results.ID),
-				Name: results.Name,
+				ID:    uint(results.ID),
+				Name:  results.Name,
 				Email: results.Email,
 				Phone: results.Phone,
 			})
@@ -129,8 +129,8 @@ func (c Client) UpdateClient(ctx *fiber.Ctx) error {
 				return err
 			}
 			return ctx.JSON(output.Client{
-				ID:   uint(results.ID),
-				Name: results.Name,
+				ID:    uint(results.ID),
+				Name:  results.Name,
 				Email: results.Email,
 				Phone: results.Phone,
 			})

@@ -8,7 +8,6 @@ import (
 	"github.com/shaband/POS/internal/output"
 	"github.com/shaband/POS/internal/service"
 	"go.uber.org/fx"
-
 )
 
 type Product struct {
