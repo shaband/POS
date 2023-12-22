@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 
+	"github.com/uptrace/bun"
+
 	"github.com/shaband/POS/internal/model"
 	"github.com/shaband/POS/internal/model/dto"
-	"github.com/uptrace/bun"
 )
 
 type Inventory struct {
@@ -20,13 +21,13 @@ func NewInventory(db *bun.DB) *Inventory {
 }
 
 func (r *Inventory) GetInventories(ctx context.Context) ([]model.Inventory, error) {
-	var categories []model.Inventory
+	var inventories []model.Inventory
 
 	err := r.db.NewSelect().
-		Model(&categories).
+		Model(&inventories).
 		Scan(ctx)
 
-	return categories, err
+	return inventories, err
 }
 
 func (r *Inventory) AddInventory(ctx context.Context, inventoryDTO *dto.InventoryDTO) (*model.Inventory, error) {

@@ -2,12 +2,13 @@ package controller
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"go.uber.org/fx"
+
 	"github.com/shaband/POS/internal/helper"
 	"github.com/shaband/POS/internal/model"
 	"github.com/shaband/POS/internal/model/dto"
 	"github.com/shaband/POS/internal/output"
 	"github.com/shaband/POS/internal/service"
-	"go.uber.org/fx"
 )
 
 type Product struct {
@@ -22,6 +23,7 @@ func RegisterProduct(c Product) {
 	c.Route.Get("/products", c.GetProducts)
 	c.Route.Post("/products", c.AddProduct)
 	c.Route.Patch("/products/:id", c.UpdateProduct)
+	c.Route.Get("/products/:id", c.ShowProduct)
 	c.Route.Delete("/products/:id", c.DeleteProduct)
 }
 
@@ -92,6 +94,55 @@ func (c Product) AddProduct(ctx *fiber.Ctx) error {
 				Image:     results.Image,
 			})
 		}
+	}
+	return err
+}
+
+// get product godoc
+//
+//	@Summary		show  Product
+//	@Description	show  Product
+//	@Tags			products
+//	@Accept			json
+//	@Produce		json
+//	@param			product_id	path		int		true	"Product ID"
+//
+//	@Success		200			{object}	model.Product
+//
+//	@Failure		400			{object}	output.HTTPError
+//	@Router			/products/{product_id} [Get]
+func (c Product) ShowProduct(ctx *fiber.Ctx) error {
+	id, err := ctx.ParamsInt("id")
+	if err == nil {
+		var results *model.Product
+		results, err = c.Service.ShowProduct(ctx.Context(), id)
+		if err != nil {
+			return err
+		}
+		var inventories []output.ProductInventory
+		for _, inventory := range results.Inventories {
+			inventories = append(inventories, output.ProductInventory{
+				ID:                uint(inventory.ID),
+				Name:              inventory.Name,
+				Address:           inventory.Address,
+				SellInvoicesCount: inventory.ProductStock.SellInvoicesCount,
+				BuyInvoicesCount:  inventory.ProductStock.BuyInvoicesCount,
+				Amount:            inventory.ProductStock.Amount,
+			})
+		}
+		return ctx.JSON(output.ProductDetails{
+			ID:        results.ID,
+			Name:      results.Name,
+			Code:      results.Code,
+			CostPrice: results.CostPrice,
+			SellPrice: results.SellPrice,
+			Image:     results.Image,
+			Category: output.Category{
+				ID:   uint(results.Category.ID),
+				Name: results.Category.Name,
+			},
+			Inventories: inventories,
+		})
 	}
 	return err
 }

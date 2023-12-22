@@ -2,8 +2,8 @@ SET statement_timeout = 0;
 
 --bun:split
 
-create  table public.inventory_product(
-id serial not null constraint inventory_product_id primary key ,
+create  table public.inventory_to_product(
+id serial not null constraint inventory_to_product primary key ,
 product_id integer not null REFERENCES products,
 inventory_id integer not null REFERENCES inventories,
 amount integer not null default 0,

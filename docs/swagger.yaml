@@ -62,6 +62,10 @@ definitions:
       name:
         example: category1
         type: string
+      products:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
     type: object
   model.Client:
     properties:
@@ -95,9 +99,15 @@ definitions:
       name:
         example: category1
         type: string
+      products:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
     type: object
   model.Product:
     properties:
+      category:
+        $ref: '#/definitions/model.Category'
       category_id:
         example: 1
         type: integer
@@ -113,6 +123,10 @@ definitions:
       image:
         example: http://lorempicsm/100.jpg
         type: string
+      inventories:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
       name:
         example: category1
         type: string
@@ -605,15 +619,16 @@ paths:
       - description: enter product sell price
         in: formData
         name: sell_price
+        required: true
         type: number
       - description: category ID
         in: formData
         name: category_id
+        required: true
         type: integer
       - description: image
         in: formData
         name: image
-        required: true
         type: file
       produces:
       - multipart/form-data
@@ -651,6 +666,30 @@ paths:
       tags:
       - products
   /products/{product_id}:
+    get:
+      consumes:
+      - application/json
+      description: show  Product
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: show  Product
+      tags:
+      - products
     patch:
       consumes:
       - multipart/form-data
@@ -674,10 +713,12 @@ paths:
       - description: enter product sell price
         in: formData
         name: sell_price
+        required: true
         type: number
       - description: category ID
         in: formData
         name: category_id
+        required: true
         type: integer
       - description: image
         in: formData

@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 
-	"github.com/shaband/POS/internal/model"
-	"github.com/shaband/POS/internal/model/dto"
 	"github.com/uptrace/bun"
 
+	"github.com/shaband/POS/internal/model"
+	"github.com/shaband/POS/internal/model/dto"
 )
 
 type Product struct {
@@ -41,6 +41,22 @@ func (r Product) AddProduct(ctx context.Context, productDTO *dto.ProductDTO) (*m
 	}
 	_, err := r.db.NewInsert().Model(product).Exec(ctx)
 
+	return product, err
+}
+
+func (r Product) ShowProduct(ctx context.Context, productID int) (*model.Product, error) {
+	product := &model.Product{
+		ID: productID,
+	}
+	err := r.db.NewSelect().
+		Model(product).
+		WherePK().
+		Relation("Category").
+		Relation("Inventories",
+			func(q1 *bun.SelectQuery) *bun.SelectQuery {
+				return q1.Relation("ProductStock")
+			}).Scan(ctx)
+	// err = nil
 	return product, err
 }
 

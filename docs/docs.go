@@ -577,20 +577,21 @@ const docTemplate = `{
                         "type": "number",
                         "description": "enter product sell price",
                         "name": "sell_price",
-                        "in": "formData"
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "integer",
                         "description": "category ID",
                         "name": "category_id",
-                        "in": "formData"
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "file",
                         "description": "image",
                         "name": "image",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     }
                 ],
                 "responses": {
@@ -642,6 +643,42 @@ const docTemplate = `{
             }
         },
         "/products/{product_id}": {
+            "get": {
+                "description": "show  Product",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "show  Product",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            },
             "patch": {
                 "description": "Update  Product",
                 "consumes": [
@@ -680,13 +717,15 @@ const docTemplate = `{
                         "type": "number",
                         "description": "enter product sell price",
                         "name": "sell_price",
-                        "in": "formData"
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "integer",
                         "description": "category ID",
                         "name": "category_id",
-                        "in": "formData"
+                        "in": "formData",
+                        "required": true
                     },
                     {
                         "type": "file",
@@ -950,6 +989,12 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "category1"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Product"
+                    }
                 }
             }
         },
@@ -999,12 +1044,21 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "category1"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Product"
+                    }
                 }
             }
         },
         "model.Product": {
             "type": "object",
             "properties": {
+                "category": {
+                    "$ref": "#/definitions/model.Category"
+                },
                 "category_id": {
                     "type": "integer",
                     "example": 1
@@ -1024,6 +1078,12 @@ const docTemplate = `{
                 "image": {
                     "type": "string",
                     "example": "http://lorempicsm/100.jpg"
+                },
+                "inventories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Product"
+                    }
                 },
                 "name": {
                     "type": "string",

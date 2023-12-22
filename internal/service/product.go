@@ -27,6 +27,10 @@ func (s *Product) AddProduct(ctx context.Context, productDTO *dto.ProductDTO) (*
 	return s.Repo.AddProduct(ctx, productDTO)
 }
 
+func (s *Product) ShowProduct(ctx context.Context, productID int) (*model.Product, error) {
+	return s.Repo.ShowProduct(ctx, productID)
+}
+
 func (s *Product) UpdateProduct(ctx context.Context, productID int, productDTO *dto.ProductDTO) (*model.Product, error) {
 	return s.Repo.UpdateProduct(ctx, productID, productDTO)
 }
