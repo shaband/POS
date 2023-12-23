@@ -11,5 +11,6 @@ func Module() fx.Option {
 		NewClient,
 		NewProduct,
 		NewInventory,
+		NewInvoice,
 	))
 }

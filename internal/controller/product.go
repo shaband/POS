@@ -105,7 +105,7 @@ func (c Product) AddProduct(ctx *fiber.Ctx) error {
 //	@Tags			products
 //	@Accept			json
 //	@Produce		json
-//	@param			product_id	path		int		true	"Product ID"
+//	@param			product_id	path		int	true	"Product ID"
 //
 //	@Success		200			{object}	model.Product
 //

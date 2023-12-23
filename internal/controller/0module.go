@@ -10,5 +10,6 @@ func Module() fx.Option {
 		RegisterClient,
 		RegisterProduct,
 		RegisterInventory,
+		RegisterInvoice,
 	))
 }

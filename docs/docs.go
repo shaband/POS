@@ -514,6 +514,70 @@ const docTemplate = `{
                 }
             }
         },
+        "/invoices": {
+            "get": {
+                "description": "get All Invoices",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "invoices"
+                ],
+                "summary": "get All Invoices",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/output.Invoice"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add New Invoice",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "invoices"
+                ],
+                "summary": "Add New Invoice",
+                "parameters": [
+                    {
+                        "description": "invoice data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.InvoiceDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Invoice Stored Successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/output.HTTPError"
+                        }
+                    }
+                }
+            }
+        },
         "/products": {
             "get": {
                 "description": "get All Products",
@@ -950,6 +1014,37 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.InvoiceDTO": {
+            "type": "object",
+            "properties": {
+                "client_id": {
+                    "type": "integer"
+                },
+                "inventory_id": {
+                    "type": "integer"
+                },
+                "is_sell": {
+                    "type": "boolean"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.InvoiceItemDTO"
+                    }
+                }
+            }
+        },
+        "dto.InvoiceItemDTO": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "product_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UpdateUserDTO": {
             "type": "object",
             "properties": {
@@ -1045,11 +1140,40 @@ const docTemplate = `{
                     "type": "string",
                     "example": "category1"
                 },
+                "productStock": {
+                    "$ref": "#/definitions/model.InventoryToProduct"
+                },
                 "products": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.Product"
                     }
+                }
+            }
+        },
+        "model.InventoryToProduct": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "buy_invoices_count": {
+                    "type": "integer"
+                },
+                "inventory": {
+                    "$ref": "#/definitions/model.Inventory"
+                },
+                "inventoryID": {
+                    "type": "integer"
+                },
+                "product": {
+                    "$ref": "#/definitions/model.Product"
+                },
+                "productID": {
+                    "type": "integer"
+                },
+                "sell_invoices_count": {
+                    "type": "integer"
                 }
             }
         },
@@ -1082,7 +1206,7 @@ const docTemplate = `{
                 "inventories": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.Product"
+                        "$ref": "#/definitions/model.Inventory"
                     }
                 },
                 "name": {
@@ -1193,6 +1317,84 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "inventory"
+                }
+            }
+        },
+        "output.Invoice": {
+            "type": "object",
+            "properties": {
+                "client": {
+                    "$ref": "#/definitions/output.NameWithID"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "inventory": {
+                    "$ref": "#/definitions/output.NameWithID"
+                },
+                "isSell": {
+                    "type": "boolean"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/output.InvoiceItem"
+                    }
+                },
+                "totalCost": {
+                    "type": "number"
+                },
+                "totalPrice": {
+                    "type": "number"
+                },
+                "user": {
+                    "$ref": "#/definitions/output.NameWithID"
+                }
+            }
+        },
+        "output.InvoiceItem": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "product": {
+                    "$ref": "#/definitions/output.Product"
+                },
+                "totalCost": {
+                    "type": "number",
+                    "example": 6
+                },
+                "totalPrice": {
+                    "type": "number",
+                    "example": 3
+                },
+                "unitCostPrice": {
+                    "type": "number",
+                    "example": 2
+                },
+                "unitSellPrice": {
+                    "type": "number",
+                    "example": 1
+                }
+            }
+        },
+        "output.NameWithID": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "name"
                 }
             }
         },

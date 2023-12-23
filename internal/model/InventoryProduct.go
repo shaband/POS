@@ -3,7 +3,7 @@ package model
 import "github.com/uptrace/bun"
 
 type InventoryToProduct struct {
-	bun.BaseModel     `bun:"table:inventory_to_product"`
+	bun.BaseModel     `bun:"table:inventory_to_product" swaggerignore:"true"`
 	ProductID         int        `bun:",pk"`
 	Product           *Product   `bun:"rel:belongs-to,join:product_id=id"`
 	InventoryID       int        `bun:",pk"`

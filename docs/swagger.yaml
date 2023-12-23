@@ -33,6 +33,26 @@ definitions:
         example: inventory1
         type: string
     type: object
+  dto.InvoiceDTO:
+    properties:
+      client_id:
+        type: integer
+      inventory_id:
+        type: integer
+      is_sell:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/dto.InvoiceItemDTO'
+        type: array
+    type: object
+  dto.InvoiceItemDTO:
+    properties:
+      amount:
+        type: number
+      product_id:
+        type: integer
+    type: object
   dto.UpdateUserDTO:
     properties:
       email:
@@ -99,10 +119,29 @@ definitions:
       name:
         example: category1
         type: string
+      productStock:
+        $ref: '#/definitions/model.InventoryToProduct'
       products:
         items:
           $ref: '#/definitions/model.Product'
         type: array
+    type: object
+  model.InventoryToProduct:
+    properties:
+      amount:
+        type: integer
+      buy_invoices_count:
+        type: integer
+      inventory:
+        $ref: '#/definitions/model.Inventory'
+      inventoryID:
+        type: integer
+      product:
+        $ref: '#/definitions/model.Product'
+      productID:
+        type: integer
+      sell_invoices_count:
+        type: integer
     type: object
   model.Product:
     properties:
@@ -125,7 +164,7 @@ definitions:
         type: string
       inventories:
         items:
-          $ref: '#/definitions/model.Product'
+          $ref: '#/definitions/model.Inventory'
         type: array
       name:
         example: category1
@@ -202,6 +241,60 @@ definitions:
         type: integer
       name:
         example: inventory
+        type: string
+    type: object
+  output.Invoice:
+    properties:
+      client:
+        $ref: '#/definitions/output.NameWithID'
+      id:
+        example: 1
+        type: integer
+      inventory:
+        $ref: '#/definitions/output.NameWithID'
+      isSell:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/output.InvoiceItem'
+        type: array
+      totalCost:
+        type: number
+      totalPrice:
+        type: number
+      user:
+        $ref: '#/definitions/output.NameWithID'
+    type: object
+  output.InvoiceItem:
+    properties:
+      amount:
+        example: 3
+        type: integer
+      id:
+        example: 1
+        type: integer
+      product:
+        $ref: '#/definitions/output.Product'
+      totalCost:
+        example: 6
+        type: number
+      totalPrice:
+        example: 3
+        type: number
+      unitCostPrice:
+        example: 2
+        type: number
+      unitSellPrice:
+        example: 1
+        type: number
+    type: object
+  output.NameWithID:
+    properties:
+      id:
+        example: 1
+        type: integer
+      name:
+        example: name
         type: string
     type: object
   output.Product:
@@ -579,6 +672,48 @@ paths:
       summary: Update  Inventory
       tags:
       - inventories
+  /invoices:
+    get:
+      consumes:
+      - application/json
+      description: get All Invoices
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/output.Invoice'
+            type: array
+      summary: get All Invoices
+      tags:
+      - invoices
+    post:
+      consumes:
+      - application/json
+      description: Add New Invoice
+      parameters:
+      - description: invoice data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.InvoiceDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Invoice Stored Successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/output.HTTPError'
+      summary: Add New Invoice
+      tags:
+      - invoices
   /products:
     get:
       consumes:

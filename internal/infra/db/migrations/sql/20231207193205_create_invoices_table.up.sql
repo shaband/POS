@@ -2,7 +2,7 @@ SET statement_timeout = 0;
 
 --bun:split
 
-create table public.inovoices (
+create table public.invoices (
     id serial not null constraint inovoice_id primary key,
     created_at timestamp not null default now(),   
     updated_at timestamp not null default now(),   
@@ -17,14 +17,14 @@ create table public.inovoices (
 
 --bun:split
 
-create table public.inovoice_items (
+create table public.invoice_items (
     id serial not null constraint inovoice_items_id primary key,
     created_at timestamp not null default now(),   
     updated_at timestamp not null default now(),   
     deleted_at timestamp,
-    inovoice_id integer REFERENCES inovoices (id),
+    invoice_id integer REFERENCES inovoices (id),
     product_id integer REFERENCES products (id),
-    user_id integer REFERENCES users (id),
+    -- user_id integer REFERENCES users (id),
     unit_sell_price text not null,
     unit_cost_price text not null,
     amount text not null ,
