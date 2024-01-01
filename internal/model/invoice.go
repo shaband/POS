@@ -23,7 +23,7 @@ type Invoice struct {
 	Items       []*InvoiceItem `bun:"rel:has-many,join:id=invoice_id"`
 }
 type InvoiceItem struct {
-	bun.BaseModel `bun:"inventories"                                 swaggerignore:"true"`
+	bun.BaseModel `bun:"invoice_items"                               swaggerignore:"true"`
 	ID            int       `bun:",pk,autoincrement"                           example:"1"          json:"id"`
 	CreatedAt     time.Time `bun:",nullzero,notnull,default:current_timestamp" swaggerignore:"true"`
 	UpdatedAt     time.Time `bun:",nullzero,notnull,default:current_timestamp" swaggerignore:"true"`

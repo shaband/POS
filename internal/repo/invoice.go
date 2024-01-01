@@ -48,3 +48,22 @@ func (r *Invoice) AddInvoice(ctx context.Context, invoiceDTO *dto.InvoiceDTO) (*
 	}
 	return &invoice, err
 }
+
+func (r *Invoice) AddItemToInvoice(ctx context.Context, InvoiceID int, invoiceItemDTO *dto.InvoiceItemDTO) (*model.InvoiceItem, error) {
+	invoiceItem := model.InvoiceItem{
+		InvoiceID:     InvoiceID,
+		ProductID:     invoiceItemDTO.ProductID,
+		Amount:        invoiceItemDTO.Amount,
+		UnitSellPrice: invoiceItemDTO.UnitSellPrice,
+		UnitCostPrice: invoiceItemDTO.UnitCostPrice,
+		TotalPrice:    invoiceItemDTO.UnitSellPrice * invoiceItemDTO.Amount,
+		TotalCost:     invoiceItemDTO.UnitCostPrice * invoiceItemDTO.Amount,
+	}
+	q := r.db.NewInsert().
+		Model(&invoiceItem)
+	_, err := q.Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &invoiceItem, err
+}

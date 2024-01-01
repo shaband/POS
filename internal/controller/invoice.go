@@ -74,13 +74,32 @@ func (c *Invoice) GetInvoices(ctx *fiber.Ctx) error {
 func (c Invoice) AddInvoice(ctx *fiber.Ctx) error {
 	InvoiceDTO := new(dto.InvoiceDTO)
 	_ = ctx.BodyParser(InvoiceDTO)
+	// // log.Println(InvoiceDTO)
 
 	isValid, err := c.Validator.Validate(InvoiceDTO)
 	if isValid {
-		_, err := c.Service.AddInvoice(ctx.Context(), InvoiceDTO)
-		if err == nil {
-			ctx.WriteString("Invoice Stored Successfully")
-		}
+		// TODO:: check if not sell  cost and price is required
+		// if !InvoiceDTO.IsSell {
+		// 	c.Validator.ValidateMap(map[string]interface{}{
+		// 		"address": map[string]interface{}{
+		// 			"line1":       "",
+		// 			"line2":       "",
+		// 			"postal-code": "",
+		// 		},
+		// 	}, map[string]interface{}{
+		// 		"address": map[string]interface{}{
+		// 			"line1":       "required,alphanum",
+		// 			"line2":       "alphanum",
+		// 			"postal-code": "numeric",
+		// 		},
+		// 	})
 	}
+	// m := make(map[string]interface{})
+	// ctx.BodyParser(&m)
+	_, err = c.Service.AddInvoice(ctx.Context(), InvoiceDTO)
+	if err == nil {
+		ctx.WriteString("Invoice Stored Successfully")
+	}
+	// }
 	return err
 }

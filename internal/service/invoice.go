@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 
 	"github.com/samber/lo"
@@ -12,8 +13,9 @@ import (
 )
 
 type Invoice struct {
-	Repo         *repo.Invoice
-	ProductPrice *repo.Product
+	Repo          *repo.Invoice
+	InventoryRepo *repo.Inventory
+	ProductRepo   *repo.Product
 }
 
 func NewInvoice(Repo *repo.Invoice) *Invoice {
@@ -28,20 +30,65 @@ func (s *Invoice) GetInvoices(ctx context.Context) ([]model.Invoice, error) {
 }
 
 func (s *Invoice) AddInvoice(ctx context.Context, invoiceDTO *dto.InvoiceDTO) (*model.Invoice, error) {
+	// products, _ := s.ProductRepo.GetProducts(ctx)
+	// fmt.Println(products)
+	// fmt.Println(invoiceDTO)
+	invoiceDTO.TotalCost = SumTotalForInvoice(invoiceDTO.Items, "UnitCostPrice")
+	invoiceDTO.TotalPrice = SumTotalForInvoice(invoiceDTO.Items, "UnitSellPrice")
 
-if(invoiceDTO.IsSell){
-	
-}
-	invoiceDTO.TotalCost = SumTotalForInvoice(invoiceDTO.Items, "TotalCost")
-	invoiceDTO.TotalPrice = SumTotalForInvoice(invoiceDTO.Items, "TotalPrice")
-
-	return s.Repo.AddInvoice(ctx, invoiceDTO)
+	invoice, err := s.Repo.AddInvoice(ctx, invoiceDTO)
+	if err != nil {
+		return nil, err
+	}
+	s.addInvoiceItems(ctx, invoice.ID, invoice.InventoryID, invoice.IsSell, invoiceDTO.Items)
+	return invoice, nil
 }
 
 func SumTotalForInvoice(Items []dto.InvoiceItemDTO, field string) float64 {
 	return lo.Reduce(Items, func(agg float64, item dto.InvoiceItemDTO, index int) float64 {
 		r := reflect.ValueOf(item)
+
 		f := reflect.Indirect(r).FieldByName(field)
 		return agg + f.Float()
 	}, 0)
+}
+
+func (s *Invoice) addInvoiceItems(ctx context.Context, InvoiceID, inventoryID int, isSell bool, items []dto.InvoiceItemDTO) {
+	// for _, item := range items {
+	s.Repo.AddItemToInvoice(ctx, inventoryID, &items[0])
+	inventoryToProductDTO := dto.InventoryToProductDTO{
+		ProductID:   items[0].ProductID,
+		InventoryID: inventoryID,
+		Amount:      int(items[0].Amount),
+	}
+	if isSell {
+		s.InventoryRepo.SubFromInventory(ctx, inventoryID, &inventoryToProductDTO)
+	} else {
+		s.InventoryRepo.AddToInventory(ctx, inventoryID, &inventoryToProductDTO)
+	}
+	// }
+}
+
+func (s *Invoice) getCostAndPricePerItem(ctx context.Context, isSell bool, items []dto.InvoiceItemDTO) error {
+	if isSell {
+		// productIDs := []int{}
+		// for _, prod := range items {
+		// 	productIDs = append(productIDs, prod.ProductID)
+		// }
+		products, _ := s.ProductRepo.GetProducts(ctx)
+		fmt.Println(products)
+		// if err != nil {
+		// 	return err
+		// }
+		// for _, i := range items {
+		// 	result, _ := lo.Find(products, func(item model.Product) bool {
+		// 		return item.ID == i.ProductID
+		// 	})
+		// 	cost, _ := strconv.ParseFloat(result.CostPrice, 64)
+		// 	i.UnitCostPrice = cost
+		// 	sellPrice, _ := strconv.ParseFloat(result.SellPrice, 64)
+		// 	i.UnitSellPrice = sellPrice
+		// }
+	}
+	return nil
 }

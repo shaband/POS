@@ -1018,19 +1018,34 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "client_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "inventory_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 6
                 },
                 "is_sell": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "items": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.InvoiceItemDTO"
                     }
+                },
+                "total_cost": {
+                    "type": "number",
+                    "example": 1000
+                },
+                "total_price": {
+                    "type": "number",
+                    "example": 10000
+                },
+                "user_id": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -1038,10 +1053,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "amount": {
-                    "type": "number"
+                    "type": "number",
+                    "example": 1
                 },
                 "product_id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
+                },
+                "unit_cost_price": {
+                    "type": "number",
+                    "example": 1000
+                },
+                "unit_sell_price": {
+                    "type": "number",
+                    "example": 10000
                 }
             }
         },

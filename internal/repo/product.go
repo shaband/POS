@@ -105,3 +105,19 @@ func (r *Product) DeleteProduct(ctx context.Context, productID int) error {
 	}
 	return nil
 }
+
+func (r *Product) GetProductsByIDS(ctx context.Context, productIDS *[]int) ([]model.Product, error) {
+	var products []model.Product
+	// for _, id := range productIDS {
+	// 	products = append(products, model.Product{
+	// 		ID: id,
+	// 	})
+	// }
+
+	err := r.db.NewSelect().Model(&products).Scan(ctx)
+	// fmt.Println(err)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	return products, err
+}

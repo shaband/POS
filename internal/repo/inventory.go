@@ -92,3 +92,25 @@ func (r *Inventory) DeleteInventory(ctx context.Context, inventoryID int) error 
 	}
 	return nil
 }
+
+func (r *Inventory) AddToInventory(ctx context.Context, inventoryID int, productInventoryDTO *dto.InventoryToProductDTO) {
+	entity := model.InventoryToProduct{
+		ProductID:   productInventoryDTO.ProductID,
+		InventoryID: inventoryID,
+	}
+	r.db.NewSelect().Model(&entity).WherePK().Scan(ctx)
+	entity.Amount += productInventoryDTO.Amount
+	entity.SellInvoicesCount += 1
+	r.db.NewUpdate().Model(entity).WherePK().Exec(ctx)
+}
+
+func (r *Inventory) SubFromInventory(ctx context.Context, inventoryID int, productInventoryDTO *dto.InventoryToProductDTO) {
+	entity := model.InventoryToProduct{
+		ProductID:   productInventoryDTO.ProductID,
+		InventoryID: inventoryID,
+	}
+	r.db.NewSelect().Model(&entity).WherePK().Scan(ctx)
+	entity.Amount -= productInventoryDTO.Amount
+	entity.BuyInvoicesCount += 1
+	r.db.NewUpdate().Model(entity).WherePK().Exec(ctx)
+}
