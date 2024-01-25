@@ -57,9 +57,9 @@ func (s *Invoice) addInvoiceItems(ctx context.Context, InvoiceID, inventoryID in
 	for _, item := range items {
 		s.Repo.AddItemToInvoice(ctx, inventoryID, &item)
 		inventoryToProductDTO := dto.InventoryToProductDTO{
-			ProductID:   items[0].ProductID,
+			ProductID:   item.ProductID,
 			InventoryID: inventoryID,
-			Amount:      int(items[0].Amount),
+			Amount:      int(item.Amount),
 		}
 		if isSell {
 			s.InventoryRepo.SubFromInventory(ctx, inventoryID, &inventoryToProductDTO)
