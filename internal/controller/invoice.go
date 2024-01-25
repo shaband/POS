@@ -71,12 +71,11 @@ func (c *Invoice) GetInvoices(ctx *fiber.Ctx) error {
 //
 //	@Failure		400		{object}	output.HTTPError
 //	@Router			/invoices [Post]
-func (c Invoice) AddInvoice(ctx *fiber.Ctx) error {
+func (c *Invoice) AddInvoice(ctx *fiber.Ctx) error {
 	InvoiceDTO := new(dto.InvoiceDTO)
 	_ = ctx.BodyParser(InvoiceDTO)
-	// // log.Println(InvoiceDTO)
 
-	isValid, err := c.Validator.Validate(InvoiceDTO)
+	isValid, _ := c.Validator.Validate(InvoiceDTO)
 	if isValid {
 		// TODO:: check if not sell  cost and price is required
 		// if !InvoiceDTO.IsSell {
@@ -96,7 +95,7 @@ func (c Invoice) AddInvoice(ctx *fiber.Ctx) error {
 	}
 	// m := make(map[string]interface{})
 	// ctx.BodyParser(&m)
-	_, err = c.Service.AddInvoice(ctx.Context(), InvoiceDTO)
+	_, err := c.Service.AddInvoice(ctx.Context(), InvoiceDTO)
 	if err == nil {
 		ctx.WriteString("Invoice Stored Successfully")
 	}
