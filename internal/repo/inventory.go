@@ -101,7 +101,7 @@ func (r *Inventory) AddToInventory(ctx context.Context, inventoryID int, product
 	r.db.NewSelect().Model(&entity).WherePK().Scan(ctx)
 	entity.Amount += productInventoryDTO.Amount
 	entity.SellInvoicesCount += 1
-	r.db.NewUpdate().Model(entity).WherePK().Exec(ctx)
+	r.db.NewUpdate().Model(&entity).WherePK().Exec(ctx)
 }
 
 func (r *Inventory) SubFromInventory(ctx context.Context, inventoryID int, productInventoryDTO *dto.InventoryToProductDTO) {
@@ -112,5 +112,5 @@ func (r *Inventory) SubFromInventory(ctx context.Context, inventoryID int, produ
 	r.db.NewSelect().Model(&entity).WherePK().Scan(ctx)
 	entity.Amount -= productInventoryDTO.Amount
 	entity.BuyInvoicesCount += 1
-	r.db.NewUpdate().Model(entity).WherePK().Exec(ctx)
+	r.db.NewUpdate().Model(&entity).WherePK().Exec(ctx)
 }

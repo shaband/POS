@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/uptrace/bun"
 
@@ -20,7 +21,7 @@ func NewProduct(db *bun.DB) *Product {
 	}
 }
 
-func (r Product) GetProducts(ctx context.Context) ([]model.Product, error) {
+func (r *Product) GetProducts(ctx context.Context) ([]model.Product, error) {
 	var products []model.Product
 
 	err := r.db.NewSelect().
@@ -30,7 +31,7 @@ func (r Product) GetProducts(ctx context.Context) ([]model.Product, error) {
 	return products, err
 }
 
-func (r Product) AddProduct(ctx context.Context, productDTO *dto.ProductDTO) (*model.Product, error) {
+func (r *Product) AddProduct(ctx context.Context, productDTO *dto.ProductDTO) (*model.Product, error) {
 	product := &model.Product{
 		Name:       productDTO.Name,
 		Code:       productDTO.Code,
@@ -44,7 +45,7 @@ func (r Product) AddProduct(ctx context.Context, productDTO *dto.ProductDTO) (*m
 	return product, err
 }
 
-func (r Product) ShowProduct(ctx context.Context, productID int) (*model.Product, error) {
+func (r *Product) ShowProduct(ctx context.Context, productID int) (*model.Product, error) {
 	product := &model.Product{
 		ID: productID,
 	}
@@ -60,7 +61,7 @@ func (r Product) ShowProduct(ctx context.Context, productID int) (*model.Product
 	return product, err
 }
 
-func (r Product) UpdateProduct(ctx context.Context, productID int, productDTO *dto.ProductDTO) (*model.Product, error) {
+func (r *Product) UpdateProduct(ctx context.Context, productID int, productDTO *dto.ProductDTO) (*model.Product, error) {
 	product := &model.Product{
 		ID:         productID,
 		Name:       productDTO.Name,
@@ -107,17 +108,27 @@ func (r *Product) DeleteProduct(ctx context.Context, productID int) error {
 }
 
 func (r *Product) GetProductsByIDS(ctx context.Context, productIDS *[]int) ([]model.Product, error) {
-	var products []model.Product
-	// for _, id := range productIDS {
-	// 	products = append(products, model.Product{
-	// 		ID: id,
-	// 	})
-	// }
+	products := []model.Product{}
+	for _, id := range *productIDS {
+		products = append(products, model.Product{
+			ID: id,
+		})
+	}
 
 	err := r.db.NewSelect().Model(&products).Scan(ctx)
-	// fmt.Println(err)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	if err != nil {
+		return nil, err
+	}
 	return products, err
+}
+
+func (r Product) UpdateProductPrices(ctx context.Context, productID int, cost, price float64) error {
+	product := &model.Product{
+		ID:        productID,
+		CostPrice: fmt.Sprintf("%g", cost),
+		SellPrice: fmt.Sprintf("%g", price),
+	}
+	_, err := r.db.NewUpdate().Model(product).WherePK().OmitZero().Exec(ctx)
+
+	return err
 }

@@ -78,23 +78,34 @@ func (c *Invoice) AddInvoice(ctx *fiber.Ctx) error {
 	isValid, _ := c.Validator.Validate(InvoiceDTO)
 	if isValid {
 		// TODO:: check if not sell  cost and price is required
-		// if !InvoiceDTO.IsSell {
-		// 	c.Validator.ValidateMap(map[string]interface{}{
-		// 		"address": map[string]interface{}{
-		// 			"line1":       "",
-		// 			"line2":       "",
-		// 			"postal-code": "",
-		// 		},
-		// 	}, map[string]interface{}{
-		// 		"address": map[string]interface{}{
-		// 			"line1":       "required,alphanum",
-		// 			"line2":       "alphanum",
-		// 			"postal-code": "numeric",
-		// 		},
-		// 	})
+		if !InvoiceDTO.IsSell {
+			m := make(map[string]interface{})
+			ctx.BodyParser(&m)
+			// items:=m["items"]
+			for i := 0; i < len(InvoiceDTO.Items); i++ {
+				// c.Validator.ValidateMap(items[i], map[string]interface{}{
+				// 	"unit_sell_price":"required,numeric",
+				// 	"unit_cost_price":"required,numeric",
+				// 	"amount":"required,numeric",
+				// 	"product_id":"required",
+
+				// }	)
+			}
+			// 		c.Validator.ValidateMap(map[string]interface{}{
+			// 			"items": []map[string]interface{}{
+			// 				"line1":       "",
+			// 				"line2":       "",
+			// 				"postal-code": "",
+			// 			},
+			// 		}, map[string]interface{}{
+			// 			"items": []map[string]interface{}{
+			// 				"line1":       "required,alphanum",
+			// 				"line2":       "alphanum",
+			// 				"postal-code": "numeric",
+			// 			},
+			// 		})
+		}
 	}
-	// m := make(map[string]interface{})
-	// ctx.BodyParser(&m)
 	_, err := c.Service.AddInvoice(ctx.Context(), InvoiceDTO)
 	if err == nil {
 		ctx.WriteString("Invoice Stored Successfully")
